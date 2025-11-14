@@ -319,7 +319,7 @@
 </div>
 
 <!-- Mobile Sidebar Overlay -->
-<div class="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden hidden" id="sidebar-overlay"></div>
+<div class="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm lg:hidden hidden transition-all duration-300" id="sidebar-overlay"></div>
 
 <!-- Mobile Menu Button -->
 <button class="fixed top-4 left-4 z-50 lg:hidden bg-white/80 backdrop-blur-lg p-2 rounded-xl shadow-lg border border-white/20" id="mobile-menu-button">

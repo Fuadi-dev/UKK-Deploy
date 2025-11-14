@@ -19,6 +19,12 @@ class Project extends Model
         'deadline' => 'datetime',
     ];
 
+    // Accessor for 'name' to use 'project_name'
+    public function getNameAttribute()
+    {
+        return $this->project_name;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

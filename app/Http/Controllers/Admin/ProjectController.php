@@ -232,10 +232,15 @@ class ProjectController extends Controller
 
         // Add avatar URL and initials for each user
         $users = $users->map(function ($user) use ($projectId) {
-            // Check if user is assigned to any other project
+            // Check if user is assigned to any active or on_hold project
+            // Only consider user as "working" if they're in an active or on_hold project
+            // Users in completed, cancelled, or expired projects are available
             $isWorking = ProjectMember::where('user_id', $user->id)
                 ->when($projectId, function($query, $projectId) {
                     return $query->where('project_id', '!=', $projectId);
+                })
+                ->whereHas('project', function($query) {
+                    $query->whereIn('status', ['active', 'on_hold']);
                 })
                 ->exists();
             
@@ -278,13 +283,17 @@ class ProjectController extends Controller
             return response()->json(['error' => 'Only users with "User" role can be added as project members.'], 422);
         }
 
-        // Check if user is already working on another project
+        // Check if user is already working on another active or on_hold project
+        // Users in completed, cancelled, or expired projects can be recruited
         $isWorking = ProjectMember::where('user_id', $request->user_id)
             ->where('project_id', '!=', $project->id)
+            ->whereHas('project', function($query) {
+                $query->whereIn('status', ['active', 'on_hold']);
+            })
             ->exists();
             
         if ($isWorking) {
-            return response()->json(['error' => 'This user is already assigned to another project and cannot be recruited.'], 422);
+            return response()->json(['error' => 'This user is already assigned to another active project and cannot be recruited.'], 422);
         }
 
         // Check if user is already a member
