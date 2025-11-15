@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\ProjectMember;
 use App\Services\ProjectStatusService;
+use App\Services\SupabaseStorageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,11 @@ class UserController extends Controller
     {
         $user = User::where('id', Auth::id())->first();
 
+        // Prevent Google users from updating their profile
+        if ($user->google_id) {
+            return back()->with('error', 'Google account users cannot update their profile. Please manage your account through Google.');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'current_password' => 'nullable|string',
@@ -48,20 +54,23 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = Auth::user()->email;
         
-        // Handle avatar upload
+        // Handle avatar upload to Supabase
         if ($request->hasFile('avatar')) {
-            // Delete old avatar if exists and is not a URL
-            if ($user->avatar && !filter_var($user->avatar, FILTER_VALIDATE_URL)) {
-                $oldAvatarPath = storage_path('app/public/avatars/' . $user->avatar);
-                if (file_exists($oldAvatarPath)) {
-                    unlink($oldAvatarPath);
-                }
+            $supabaseStorage = new SupabaseStorageService();
+            
+            // Delete old avatar from Supabase if exists and is not a Google avatar URL
+            if ($user->avatar && !str_contains($user->avatar, 'googleusercontent.com')) {
+                $supabaseStorage->delete($user->avatar);
             }
             
-            // Store new avatar
-            $avatarName = time() . '_' . $user->id . '.' . $request->avatar->extension();
-            $request->avatar->storeAs('public/avatars', $avatarName);
-            $user->avatar = $avatarName;
+            // Upload new avatar to Supabase
+            $avatarPath = $supabaseStorage->upload($request->file('avatar'), 'avatars');
+            
+            if ($avatarPath) {
+                $user->avatar = $avatarPath;
+            } else {
+                return back()->with('error', 'Failed to upload avatar. Please try again.');
+            }
         }
         
         if ($request->filled('password')) {

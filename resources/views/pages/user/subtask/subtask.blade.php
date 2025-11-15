@@ -25,49 +25,50 @@
     <!-- Main Content Area -->
     <div class="lg:ml-64">
         <!-- Top Header Bar -->
-        <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-white/20 p-4">
+        <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-white/20 p-3 lg:p-4">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <div class="hidden lg:flex items-center space-x-2 text-sm text-gray-600">
                     <a href="{{ route('dashboard') }}" class="hover:text-indigo-600 transition-colors">Home</a>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                     <span class="font-medium text-indigo-600">My Subtasks</span>
                 </div>
+                <div class="lg:hidden text-sm font-medium text-indigo-600">My Subtasks</div>
                 
                 <!-- Header Actions -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2 lg:space-x-4">
                     <!-- Add New Subtask Button -->
                     @if($userCard)
-                        <button onclick="openCreateSubtaskModal()" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-2xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button onclick="openCreateSubtaskModal()" class="inline-flex items-center px-3 py-1.5 lg:px-4 lg:py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl lg:rounded-2xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl text-xs lg:text-sm">
+                            <svg class="w-4 h-4 lg:w-5 lg:h-5 lg:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
-                            Add Subtask
+                            <span class="hidden lg:inline">Add Subtask</span>
                         </button>
                     @endif
                     
                     <!-- User Profile -->
-                    <div class="flex items-center space-x-2 p-2 rounded-xl hover:bg-white/50 transition-colors">
+                    <div class="flex items-center space-x-2 p-1.5 lg:p-2 rounded-xl hover:bg-white/50 transition-colors">
                         <x-user-avatar :user="Auth::user()" size="sm" />
-                        <span class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
+                        <span class="hidden lg:inline text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
                     </div>
                 </div>
             </div>
         </header>
 
         <!-- Main Content -->
-        <main class="p-6">
+        <main class="p-3 lg:p-6">
             <!-- Page Header -->
-            <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 mb-8">
+            <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 p-4 lg:p-8 mb-4 lg:mb-8">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                        <h1 class="text-xl lg:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1 lg:mb-2">
                             My Subtasks - Todo List
                         </h1>
-                        <p class="text-gray-600">Manage your subtasks and track your progress</p>
+                        <p class="hidden lg:block text-gray-600">Manage your subtasks and track your progress</p>
                     </div>
-                    <div class="hidden md:flex items-center space-x-6">
+                    <div class="hidden lg:flex items-center space-x-6">
                         <!-- Status Summary -->
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
@@ -104,22 +105,22 @@
 
             @if($userCard && $subtasks->count() > 0)
                 <!-- Filter and Sort Options -->
-                <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-lg border border-white/20 p-6 mb-6">
-                    <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-                        <div class="flex items-center space-x-4">
-                            <h3 class="text-lg font-semibold text-gray-800">Filter & Sort</h3>
-                            <select id="statusFilter" class="px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-lg border border-white/20 p-3 lg:p-6 mb-4 lg:mb-6">
+                    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between space-y-3 lg:space-y-0">
+                        <div class="flex flex-col lg:flex-row lg:items-center space-y-2 lg:space-y-0 lg:space-x-4 w-full lg:w-auto">
+                            <h3 class="text-sm lg:text-lg font-semibold text-gray-800">Filter & Sort</h3>
+                            <select id="statusFilter" class="px-3 py-1.5 lg:px-4 lg:py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-xs lg:text-sm">
                                 <option value="all">All Status</option>
                                 <option value="in_progress">In Progress</option>
                                 <option value="done">Completed</option>
                             </select>
-                            <div class="text-sm text-gray-600">
+                            <div class="hidden lg:block text-sm text-gray-600">
                                 Card: <span class="font-medium text-purple-600">{{ $userCard->card_title }}</span>
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <span class="text-sm text-gray-600">Total:</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
+                            <span class="text-xs lg:text-sm text-gray-600">Total:</span>
+                            <span class="px-2 py-0.5 lg:px-3 lg:py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs lg:text-sm font-medium">
                                 {{ $subtasks->count() }} subtasks
                             </span>
                         </div>
@@ -127,11 +128,11 @@
                 </div>
 
                 <!-- Subtasks List -->
-                <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h2 class="text-2xl font-bold text-gray-800">My Todo List</h2>
-                            <div class="text-sm text-gray-600">
+                <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+                    <div class="p-3 lg:p-6">
+                        <div class="flex items-center justify-between mb-4 lg:mb-6">
+                            <h2 class="text-lg lg:text-2xl font-bold text-gray-800">My Todo List</h2>
+                            <div class="hidden lg:block text-sm text-gray-600">
                                 Drag to reorder, click to mark complete
                             </div>
                         </div>
@@ -190,9 +191,9 @@
                                                     </button>
                                                     
                                                     <button onclick="deleteSubtask({{ $subtask->id }})" 
-                                                            class="p-2 bg-red-100 text-red-600 rounded-xl hover:bg-red-200 transition-colors"
+                                                            class="p-1.5 lg:p-2 bg-red-100 text-red-600 rounded-lg lg:rounded-xl hover:bg-red-200 transition-colors"
                                                             title="Delete">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                         </svg>
                                                     </button>
@@ -200,28 +201,28 @@
                                             </div>
 
                                             @if($subtask->description)
-                                                <div class="mb-3 p-3 bg-gray-50 rounded-xl">
+                                                <div class="hidden lg:block mb-3 p-3 bg-gray-50 rounded-xl">
                                                     <p class="text-sm text-gray-700">{{ $subtask->description }}</p>
                                                 </div>
                                             @endif
 
-                                            <div class="flex items-center space-x-4 text-sm text-gray-600">
+                                            <div class="flex flex-wrap items-center gap-2 lg:gap-4 text-xs lg:text-sm text-gray-600">
                                                 <!-- Status Badge -->
-                                                <span class="px-3 py-1 text-xs font-medium rounded-full
+                                                <span class="px-2 py-0.5 lg:px-3 lg:py-1 text-xs font-medium rounded-full
                                                     {{ $subtask->status === 'done' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
                                                     {{ $subtask->status === 'done' ? 'Completed' : 'In Progress' }}
                                                 </span>
 
                                                 <!-- Comments Count -->
                                                 <div class="flex items-center space-x-1">
-                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                                     </svg>
-                                                    <span>{{ $subtask->comments->count() }} comments</span>
+                                                    <span>{{ $subtask->comments->count() }}</span>
                                                 </div>
 
                                                 @if($subtask->estimated_hours)
-                                                    <div class="flex items-center space-x-1">
+                                                    <div class="hidden lg:flex items-center space-x-1">
                                                         <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                         </svg>
@@ -230,7 +231,7 @@
                                                 @endif
 
                                                 @if($subtask->actual_hours)
-                                                    <div class="flex items-center space-x-1">
+                                                    <div class="hidden lg:flex items-center space-x-1">
                                                         <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                         </svg>
@@ -238,7 +239,7 @@
                                                     </div>
                                                 @endif
 
-                                                <div class="flex items-center space-x-1">
+                                                <div class="hidden lg:flex items-center space-x-1">
                                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                                     </svg>

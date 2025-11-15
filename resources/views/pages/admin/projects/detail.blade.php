@@ -25,40 +25,46 @@
     <!-- Main Content Area -->
     <div class="lg:ml-64">
         <!-- Top Header Bar -->
-        <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-white/20 p-4">
+        <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-white/20 p-3 lg:p-4">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <!-- Mobile: Back Button, Desktop: Breadcrumb -->
+                <a href="{{ route('projects') }}" class="lg:hidden p-2 hover:bg-gray-100 rounded-xl transition-colors">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </a>
+                <div class="hidden lg:flex items-center space-x-2 text-sm text-gray-600">
                     <a href="{{ route('projects') }}" class="hover:text-indigo-600 transition-colors">Projects</a>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
-                    <span class="font-medium text-indigo-600">{{ $project->project_name }}</span>
+                    <span class="font-medium text-indigo-600 truncate">{{ $project->project_name }}</span>
                 </div>
                 
                 <!-- Header Actions -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
                     @if(auth()->user()->role === 'admin' || $project->user_id === auth()->user()->id)
-                        <a href="{{ route('projects.edit', $project->slug) }}" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-4 py-2 rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 flex items-center space-x-2 shadow-lg">
+                        <a href="{{ route('projects.edit', $project->slug) }}" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-2 lg:px-4 lg:py-2 rounded-xl hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 flex items-center space-x-2 shadow-lg">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                             </svg>
-                            <span>Edit Project</span>
+                            <span class="hidden lg:inline">Edit Project</span>
                         </a>
                         
                         <form action="{{ route('projects.delete', $project->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="button" class="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 flex items-center space-x-2 shadow-lg delete-btn">
+                            <button type="button" class="bg-gradient-to-r from-red-500 to-red-600 text-white p-2 lg:px-4 lg:py-2 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 flex items-center space-x-2 shadow-lg delete-btn">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                 </svg>
-                                <span>Delete</span>
+                                <span class="hidden lg:inline">Delete</span>
                             </button>
                         </form>
                     @endif
                     
-                    <!-- User Profile -->
-                    <div class="flex items-center space-x-2 p-2 rounded-xl hover:bg-white/50 transition-colors">
+                    <!-- User Profile - Hidden on mobile -->
+                    <div class="hidden md:flex items-center space-x-2 p-2 rounded-xl hover:bg-white/50 transition-colors">
                         <x-user-avatar :user="Auth::user()" size="sm" />
                     </div>
                 </div>
@@ -66,7 +72,7 @@
         </header>
 
         <!-- Main Project Detail Content -->
-        <main class="p-6">
+        <main class="p-3 lg:p-6">
             <!-- SweetAlert Success/Error Messages -->
             @if(session('success'))
                 <script>
@@ -109,17 +115,17 @@
             @endif
 
             <!-- Project Header -->
-            <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 mb-8">
-                <div class="flex items-start justify-between mb-6">
-                    <div class="flex items-start space-x-6">
-                        <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-3xl flex items-center justify-center flex-shrink-0">
-                            <span class="text-white font-bold text-2xl">{{ strtoupper(substr($project->project_name, 0, 1)) }}</span>
+            <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 p-4 lg:p-8 mb-4 lg:mb-8">
+                <div class="flex flex-col lg:flex-row items-start justify-between mb-4 lg:mb-6 space-y-4 lg:space-y-0">
+                    <div class="flex items-start space-x-3 lg:space-x-6 w-full lg:w-auto">
+                        <div class="w-14 h-14 lg:w-20 lg:h-20 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl lg:rounded-3xl flex items-center justify-center flex-shrink-0">
+                            <span class="text-white font-bold text-xl lg:text-2xl">{{ strtoupper(substr($project->project_name, 0, 1)) }}</span>
                         </div>
-                        <div class="flex-1">
-                            <h1 class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                        <div class="flex-1 min-w-0">
+                            <h1 class="text-lg lg:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1 lg:mb-2 truncate">
                                 {{ $project->project_name }}
                             </h1>
-                            <p class="text-gray-600 text-lg leading-relaxed mb-4">
+                            <p class="text-gray-600 text-sm lg:text-lg leading-relaxed mb-2 lg:mb-4 line-clamp-2 lg:line-clamp-none">
                                 {{ $project->description ?: 'No description available for this project.' }}
                             </p>
                             <div class="flex items-center space-x-6 text-sm">
@@ -187,27 +193,27 @@
                 </div>
 
                 <!-- Project Stats -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-2xl border border-blue-200">
-                        <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-blue-800 font-semibold">Project Info</h3>
-                            <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-3 lg:p-6 rounded-xl lg:rounded-2xl border border-blue-200">
+                        <div class="flex items-center justify-between mb-2 lg:mb-3">
+                            <h3 class="text-blue-800 font-semibold text-xs lg:text-base">Project Info</h3>
+                            <div class="w-6 h-6 lg:w-8 lg:h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
                         </div>
-                        <div class="space-y-2">
+                        <div class="space-y-1 lg:space-y-2">
                             @if($project->deadline)
-                                <p class="text-sm text-blue-700">
+                                <p class="text-xs lg:text-sm text-blue-700">
                                     <span class="font-medium">Deadline:</span> {{ $project->deadline->format('M d, Y') }}
                                 </p>
                             @else
-                                <p class="text-sm text-blue-700">
+                                <p class="text-xs lg:text-sm text-blue-700">
                                     <span class="font-medium">Deadline:</span> Not set
                                 </p>
                             @endif
-                            <p class="text-sm text-blue-700">
+                            <p class="text-xs lg:text-sm text-blue-700">
                                 <span class="font-medium">Status:</span> 
                                 @if($project->deadline && $project->deadline < now())
                                     Overdue
@@ -220,49 +226,49 @@
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-emerald-50 to-teal-100 p-6 rounded-2xl border border-emerald-200">
-                        <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-emerald-800 font-semibold">Team</h3>
-                            <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-100 p-3 lg:p-6 rounded-xl lg:rounded-2xl border border-emerald-200">
+                        <div class="flex items-center justify-between mb-2 lg:mb-3">
+                            <h3 class="text-emerald-800 font-semibold text-xs lg:text-base">Team</h3>
+                            <div class="w-6 h-6 lg:w-8 lg:h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                                <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                 </svg>
                             </div>
                         </div>
-                        <div class="space-y-2">
-                            <p class="text-sm text-emerald-700">
+                        <div class="space-y-1 lg:space-y-2">
+                            <p class="text-xs lg:text-sm text-emerald-700">
                                 <span class="font-medium">Members:</span> {{ $project->members->count() }}
                             </p>
-                            <p class="text-sm text-emerald-700">
+                            <p class="text-xs lg:text-sm text-emerald-700">
                                 <span class="font-medium">Leaders:</span> {{ $project->members->where('role', 'Project Manager')->count() }}
                             </p>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-amber-50 to-orange-100 p-6 rounded-2xl border border-amber-200">
-                        <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-amber-800 font-semibold">Boards</h3>
-                            <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-gradient-to-br from-amber-50 to-orange-100 p-3 lg:p-6 rounded-xl lg:rounded-2xl border border-amber-200">
+                        <div class="flex items-center justify-between mb-2 lg:mb-3">
+                            <h3 class="text-amber-800 font-semibold text-xs lg:text-base">Boards</h3>
+                            <div class="w-6 h-6 lg:w-8 lg:h-8 bg-amber-500 rounded-lg flex items-center justify-center">
+                                <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                                 </svg>
                             </div>
                         </div>
-                        <div class="space-y-2">
-                            <p class="text-sm text-amber-700">
+                        <div class="space-y-1 lg:space-y-2">
+                            <p class="text-xs lg:text-sm text-amber-700">
                                 <span class="font-medium">Total Boards:</span> {{ $project->boards->count() }}
                             </p>
-                            <p class="text-sm text-amber-700">
+                            <p class="text-xs lg:text-sm text-amber-700">
                                 <span class="font-medium">Total Cards:</span> {{ $project->boards->sum(function($board) { return $board->cards->count(); }) }}
                             </p>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-purple-50 to-pink-100 p-6 rounded-2xl border border-purple-200">
-                        <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-purple-800 font-semibold">Card Status</h3>
-                            <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-100 p-3 lg:p-6 rounded-xl lg:rounded-2xl border border-purple-200">
+                        <div class="flex items-center justify-between mb-2 lg:mb-3">
+                            <h3 class="text-purple-800 font-semibold text-xs lg:text-base">Card Status</h3>
+                            <div class="w-6 h-6 lg:w-8 lg:h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                                <svg class="w-3 h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                                 </svg>
                             </div>
@@ -296,21 +302,21 @@
             </div>
 
             <!-- Team Members Section -->
-            <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 mb-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Team Members</h2>
+            <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 p-4 lg:p-8 mb-4 lg:mb-8">
+                <div class="flex items-center justify-between mb-4 lg:mb-6">
+                    <h2 class="text-lg lg:text-2xl font-bold text-gray-800">Team Members</h2>
                     @if(auth()->user()->role === 'admin' || $project->user_id === auth()->user()->id)
-                        <button id="addMemberBtn" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2">
+                        <button id="addMemberBtn" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-2 lg:px-4 lg:py-2 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>
-                            <span>Add Member</span>
+                            <span class="hidden lg:inline">Add Member</span>
                         </button>
                     @endif
                 </div>
 
                 @if($project->members->count() > 0)
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-6">
                         @foreach($project->members as $member)
                             <div class="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
                                 <div class="flex items-center space-x-4">
@@ -375,12 +381,12 @@
 
             <!-- Boards Section -->
             @if($project->boards->count() > 0)
-                <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800">Project Boards</h2>
+                <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 p-4 lg:p-8">
+                    <div class="flex items-center justify-between mb-4 lg:mb-6">
+                        <h2 class="text-lg lg:text-2xl font-bold text-gray-800">Project Boards</h2>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-6">
                         @foreach($project->boards as $board)
                             <div class="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300">
                                 <div class="flex items-start justify-between mb-4">

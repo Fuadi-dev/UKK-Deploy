@@ -23,18 +23,18 @@
         <!-- Mobile Header Spacer -->
         <div class="lg:hidden h-16"></div>
         
-        <div class="container mx-auto px-4 py-8 lg:px-8">
+        <div class="container mx-auto px-3 py-4 lg:px-8 lg:py-8">
             <!-- Header Section -->
-            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 mb-8 overflow-hidden">
-                <div class="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-700 px-6 py-6 lg:px-8">
-                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div class="bg-white rounded-2xl lg:rounded-3xl shadow-xl border border-gray-100 mb-4 lg:mb-8 overflow-hidden">
+                <div class="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-700 px-4 py-4 lg:px-8 lg:py-6">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
                         <div>
-                            <h1 class="text-2xl lg:text-3xl font-bold text-white mb-2">Time Logs Management</h1>
-                            <p class="text-purple-100">Monitor team productivity and manage time tracking</p>
+                            <h1 class="text-lg lg:text-3xl font-bold text-white mb-1 lg:mb-2">Time Logs Management</h1>
+                            <p class="text-purple-100 text-xs lg:text-base">Monitor team productivity and manage time tracking</p>
                         </div>
-                        <div class="flex flex-col lg:flex-row items-start lg:items-center space-y-2 lg:space-y-0 lg:space-x-4">
-                            <div class="bg-white/20 backdrop-blur-sm rounded-2xl px-4 py-2">
-                                <span class="text-white font-semibold text-sm lg:text-base">Total Logs: {{ $timeLogs->total() }}</span>
+                        <div class="flex items-center gap-2 lg:gap-4">
+                            <div class="bg-white/20 backdrop-blur-sm rounded-xl px-3 py-1.5 lg:px-4 lg:py-2">
+                                <span class="text-white font-semibold text-xs lg:text-base">Total: {{ $timeLogs->total() }}</span>
                             </div>
                         </div>
                     </div>
@@ -42,55 +42,55 @@
             </div>
 
             <!-- Stats Cards -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
-                <div class="bg-white rounded-xl lg:rounded-2xl shadow-lg border border-gray-100 p-4 lg:p-6">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-4 lg:mb-8">
+                <div class="bg-white/80 backdrop-blur-lg rounded-xl lg:rounded-2xl shadow-lg border border-white/20 p-3 lg:p-6">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-clock text-blue-600 text-lg lg:text-xl"></i>
+                        <div class="w-8 h-8 lg:w-12 lg:h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-clock text-blue-600 text-base lg:text-xl"></i>
                         </div>
                         <div class="ml-3 lg:ml-4">
-                            <p class="text-gray-600 text-xs lg:text-sm">Today</p>
-                            <p class="text-xl lg:text-2xl font-bold text-gray-800">{{ number_format($stats['today_hours'], 1) }}h</p>
+                            <p class="text-gray-600 text-[10px] lg:text-sm">Today</p>
+                            <p class="text-lg lg:text-2xl font-bold text-gray-800">{{ number_format($stats['today_hours'], 1) }}h</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl lg:rounded-2xl shadow-lg border border-gray-100 p-4 lg:p-6">
+                <div class="bg-white/80 backdrop-blur-lg rounded-xl lg:rounded-2xl shadow-lg border border-white/20 p-3 lg:p-6">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-calendar-week text-green-600 text-lg lg:text-xl"></i>
+                        <div class="w-8 h-8 lg:w-12 lg:h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-calendar-week text-green-600 text-base lg:text-xl"></i>
                         </div>
                         <div class="ml-3 lg:ml-4">
-                            <p class="text-gray-600 text-xs lg:text-sm">This Week</p>
-                            <p class="text-xl lg:text-2xl font-bold text-gray-800">{{ number_format($stats['week_hours'], 1) }}h</p>
+                            <p class="text-gray-600 text-[10px] lg:text-sm">Week</p>
+                            <p class="text-lg lg:text-2xl font-bold text-gray-800">{{ number_format($stats['week_hours'], 1) }}h</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl lg:rounded-2xl shadow-lg border border-gray-100 p-4 lg:p-6">
+                <div class="bg-white/80 backdrop-blur-lg rounded-xl lg:rounded-2xl shadow-lg border border-white/20 p-3 lg:p-6">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-calendar text-purple-600 text-lg lg:text-xl"></i>
+                        <div class="w-8 h-8 lg:w-12 lg:h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-calendar text-purple-600 text-base lg:text-xl"></i>
                         </div>
                         <div class="ml-3 lg:ml-4">
-                            <p class="text-gray-600 text-xs lg:text-sm">This Month</p>
-                            <p class="text-xl lg:text-2xl font-bold text-gray-800">{{ number_format($stats['month_hours'], 1) }}h</p>
+                            <p class="text-gray-600 text-[10px] lg:text-sm">Month</p>
+                            <p class="text-lg lg:text-2xl font-bold text-gray-800">{{ number_format($stats['month_hours'], 1) }}h</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl lg:rounded-2xl shadow-lg border border-gray-100 p-4 lg:p-6">
+                <div class="bg-white/80 backdrop-blur-lg rounded-xl lg:rounded-2xl shadow-lg border border-white/20 p-3 lg:p-6">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-list text-orange-600 text-lg lg:text-xl"></i>
+                        <div class="w-8 h-8 lg:w-12 lg:h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-list text-orange-600 text-base lg:text-xl"></i>
                         </div>
                         <div class="ml-3 lg:ml-4">
-                            <p class="text-gray-600 text-xs lg:text-sm">Total Logs</p>
-                            <p class="text-xl lg:text-2xl font-bold text-gray-800">{{ $stats['total_logs'] }}</p>
+                            <p class="text-gray-600 text-[10px] lg:text-sm">Logs</p>
+                            <p class="text-lg lg:text-2xl font-bold text-gray-800">{{ $stats['total_logs'] }}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Filters and View Toggle -->
-            <div class="bg-white rounded-xl lg:rounded-2xl shadow-lg border border-gray-100 p-4 lg:p-6 mb-6 lg:mb-8">
+            <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-lg border border-white/20 p-4 lg:p-6 mb-4 lg:mb-6">
                 <div class="flex flex-col lg:flex-row lg:items-end gap-4">
                     <!-- View Toggle -->
                     <div class="flex-1">
@@ -132,7 +132,7 @@
             </div>
 
             <!-- Time Logs Table -->
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
                     <h3 class="text-lg font-semibold text-gray-800">
                         Team Card Time Logs
@@ -143,7 +143,16 @@
                 <!-- Mobile Cards View -->
                 <div class="lg:hidden">
                     @forelse($timeLogs as $timeLog)
-                    <div class="p-4 border-b border-gray-200 time-log-card">
+                    @php
+                        $isDueDatePassed = false;
+                        $dueDate = null;
+                        if($timeLog->card_id && $timeLog->card && $timeLog->card->due_date) {
+                            $dueDate = \Carbon\Carbon::parse($timeLog->card->due_date);
+                            $isDueDatePassed = now()->greaterThan($dueDate) && $timeLog->status === 'running';
+                        }
+                        $hasIssue = $timeLog->is_over_estimated || $isDueDatePassed;
+                    @endphp
+                    <div class="p-4 border-b border-gray-200 time-log-card {{ $hasIssue ? 'bg-red-50' : '' }}">
                         <div class="flex items-start justify-between mb-3">
                             <div class="flex-1">
                                 <h4 class="font-semibold text-gray-800 mb-1">{{ $timeLog->task_name }}</h4>
@@ -161,17 +170,28 @@
                                 </div>
                                 @endif
                                 
+                                <!-- Due Date Warning -->
+                                @if($isDueDatePassed)
+                                <div class="flex items-center mt-2">
+                                    <div class="flex items-center px-2 py-1 bg-red-100 border border-red-300 rounded-lg text-xs text-red-700">
+                                        <i class="fas fa-calendar-times mr-1"></i>
+                                        <span class="font-semibold">Deadline Passed!</span>
+                                        <span class="ml-1">(Due: {{ $dueDate->format('M d, Y') }})</span>
+                                    </div>
+                                </div>
+                                @endif
+                                
                                 <!-- Estimated vs Actual Hours (Mobile) -->
                                 @if($timeLog->estimated_hours > 0)
                                 <div class="mt-2">
                                     <div class="flex items-center justify-between text-xs mb-1">
                                         <span class="text-gray-500">Est: {{ $timeLog->estimated_hours }}h</span>
-                                        <span class="{{ $timeLog->is_over_estimated ? 'text-red-600 font-semibold' : 'text-blue-600' }}">
+                                        <span class="{{ $hasIssue ? 'text-red-600 font-semibold' : 'text-blue-600' }}">
                                             Actual: {{ $timeLog->actual_hours }}h
                                         </span>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-1.5">
-                                        <div class="h-1.5 rounded-full {{ $timeLog->is_over_estimated ? 'bg-red-500' : 'bg-blue-500' }}" 
+                                        <div class="h-1.5 rounded-full {{ $hasIssue ? 'bg-red-500' : 'bg-blue-500' }}" 
                                              style="width: {{ min($timeLog->progress_percentage, 100) }}%"></div>
                                     </div>
                                     @if($timeLog->is_over_estimated)
@@ -244,7 +264,16 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200" id="timeLogsTableBody">
                             @forelse($timeLogs as $timeLog)
-                            <tr class="time-log-row hover:bg-gray-50">
+                            @php
+                                $isDueDatePassed = false;
+                                $dueDate = null;
+                                if($timeLog->card_id && $timeLog->card && $timeLog->card->due_date) {
+                                    $dueDate = \Carbon\Carbon::parse($timeLog->card->due_date);
+                                    $isDueDatePassed = now()->greaterThan($dueDate) && $timeLog->status === 'running';
+                                }
+                                $hasIssue = $timeLog->is_over_estimated || $isDueDatePassed;
+                            @endphp
+                            <tr class="time-log-row hover:bg-gray-50 {{ $hasIssue ? 'bg-red-50' : '' }}">
                                 @if($view == 'team')
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
@@ -277,19 +306,30 @@
                                             </div>
                                             @endif
                                             
+                                            <!-- Due Date Warning -->
+                                            @if($isDueDatePassed)
+                                            <div class="mt-2">
+                                                <div class="flex items-center px-2 py-1 bg-red-100 border border-red-300 rounded-lg text-xs text-red-700">
+                                                    <i class="fas fa-calendar-times mr-1.5"></i>
+                                                    <span class="font-semibold">Deadline Passed!</span>
+                                                    <span class="ml-1">(Due: {{ $dueDate->format('M d, Y') }})</span>
+                                                </div>
+                                            </div>
+                                            @endif
+                                            
                                             <!-- Estimated vs Actual Hours Indicator -->
                                             @if($timeLog->estimated_hours > 0)
                                             <div class="mt-2">
                                                 <div class="flex items-center space-x-2 text-xs">
                                                     <span class="text-gray-500">Est: {{ $timeLog->estimated_hours }}h</span>
                                                     <span class="text-gray-400">|</span>
-                                                    <span class="{{ $timeLog->is_over_estimated ? 'text-red-600 font-semibold' : 'text-blue-600' }}">
+                                                    <span class="{{ $hasIssue ? 'text-red-600 font-semibold' : 'text-blue-600' }}">
                                                         Actual: {{ $timeLog->actual_hours }}h
                                                     </span>
                                                 </div>
                                                 <!-- Progress Bar -->
                                                 <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
-                                                    <div class="h-1.5 rounded-full {{ $timeLog->is_over_estimated ? 'bg-red-500' : 'bg-blue-500' }}" 
+                                                    <div class="h-1.5 rounded-full {{ $hasIssue ? 'bg-red-500' : 'bg-blue-500' }}" 
                                                          style="width: {{ min($timeLog->progress_percentage, 100) }}%"></div>
                                                 </div>
                                                 @if($timeLog->is_over_estimated)
@@ -467,7 +507,7 @@
                     <!-- Content will be loaded here -->
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <script>
@@ -673,10 +713,23 @@
                                 </div>
                             </div>
                             
+                            ${timeLog.due_date && timeLog.is_due_date_passed ? `
+                            <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-xl p-4 border border-red-300 mb-4">
+                                <div class="flex items-start">
+                                    <i class="fas fa-calendar-times text-red-600 text-xl mt-0.5 mr-3"></i>
+                                    <div>
+                                        <h4 class="font-semibold text-red-800 mb-1">Deadline Passed!</h4>
+                                        <p class="text-sm text-red-700">This task has exceeded the deadline: <strong>${new Date(timeLog.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</strong></p>
+                                        <p class="text-xs text-red-600 mt-1">Work is still in progress past the due date.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            ` : ''}
+                            
                             ${timeLog.estimated_hours > 0 ? `
-                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200">
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border ${timeLog.is_over_estimated || timeLog.is_due_date_passed ? 'border-red-300' : 'border-blue-200'}">
                                 <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
-                                    <i class="fas fa-chart-line mr-2 text-blue-600"></i>
+                                    <i class="fas fa-chart-line mr-2 ${timeLog.is_over_estimated || timeLog.is_due_date_passed ? 'text-red-600' : 'text-blue-600'}"></i>
                                     Time Estimation vs Actual
                                 </h4>
                                 <div class="grid grid-cols-2 gap-4 mb-3">
@@ -686,11 +739,11 @@
                                     </div>
                                     <div>
                                         <label class="block text-xs text-gray-600 mb-1">Actual Hours</label>
-                                        <p class="text-lg font-bold ${timeLog.is_over_estimated ? 'text-red-600' : 'text-blue-600'}">${timeLog.actual_hours}h</p>
+                                        <p class="text-lg font-bold ${timeLog.is_over_estimated || timeLog.is_due_date_passed ? 'text-red-600' : 'text-blue-600'}">${timeLog.actual_hours}h</p>
                                     </div>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
-                                    <div class="h-3 rounded-full ${timeLog.is_over_estimated ? 'bg-red-500' : 'bg-blue-500'} transition-all" 
+                                    <div class="h-3 rounded-full ${timeLog.is_over_estimated || timeLog.is_due_date_passed ? 'bg-red-500' : 'bg-blue-500'} transition-all" 
                                          style="width: ${Math.min(timeLog.progress_percentage, 100)}%"></div>
                                 </div>
                                 ${timeLog.is_over_estimated ? `
@@ -702,6 +755,11 @@
                                             <p class="text-xs text-red-600 mt-1">This task has exceeded the estimated time by <strong>${timeLog.overtime_hours} hours</strong>.</p>
                                         </div>
                                     </div>
+                                </div>
+                                ` : timeLog.is_due_date_passed ? `
+                                <div class="flex items-center text-sm text-orange-600 mt-2">
+                                    <i class="fas fa-exclamation-circle mr-2"></i>
+                                    <span>Within time estimate but past deadline</span>
                                 </div>
                                 ` : `
                                 <div class="flex items-center text-sm text-green-600 mt-2">

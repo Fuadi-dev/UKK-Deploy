@@ -23,33 +23,33 @@
         <!-- Mobile Header Spacer -->
         <div class="lg:hidden h-16"></div>
         
-        <div class="container mx-auto px-4 py-8 lg:px-8">
+        <div class="container mx-auto px-3 lg:px-8 py-4 lg:py-8">
             <!-- Header Section -->
-            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 mb-8 overflow-hidden">
-                <div class="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-700 px-6 py-6 lg:px-8">
-                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                        <div>
-                            <h1 class="text-2xl lg:text-3xl font-bold text-white mb-2">{{ $project->project_name }}</h1>
-                            <p class="text-purple-100">Project details and team management</p>
+            <div class="bg-white rounded-2xl lg:rounded-3xl shadow-xl border border-gray-100 mb-4 lg:mb-8 overflow-hidden">
+                <div class="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-700 px-4 lg:px-8 py-4 lg:py-6">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
+                        <div class="flex-1">
+                            <h1 class="text-lg lg:text-3xl font-bold text-white mb-1 lg:mb-2 truncate">{{ $project->project_name }}</h1>
+                            <p class="text-xs lg:text-base text-purple-100">Project details and team management</p>
                         </div>
-                        <div class="flex items-center space-x-4">
-                            <div class="bg-white/20 backdrop-blur-sm rounded-2xl px-4 py-2">
-                                <span class="text-white font-semibold text-sm lg:text-base">Status: {{ ucfirst(str_replace('_', ' ', $project->status)) }}</span>
+                        <div class="flex items-center gap-2 lg:gap-4 flex-wrap">
+                            <div class="bg-white/20 backdrop-blur-sm rounded-xl lg:rounded-2xl px-3 lg:px-4 py-1.5 lg:py-2">
+                                <span class="text-white font-semibold text-xs lg:text-base">Status: {{ ucfirst(str_replace('_', ' ', $project->status)) }}</span>
                             </div>
                             <a href="{{ route('dashboard') }}" 
-                               class="bg-white text-purple-600 px-4 py-2 lg:px-6 lg:py-3 rounded-2xl font-semibold hover:bg-gray-50 transition-all duration-200 shadow-lg text-sm lg:text-base">
-                                <i class="fas fa-arrow-left mr-1 lg:mr-2"></i>Back to Dashboard
+                               class="bg-white text-purple-600 px-3 py-2 lg:px-6 lg:py-3 rounded-xl lg:rounded-2xl font-semibold hover:bg-gray-50 transition-all duration-200 shadow-lg text-xs lg:text-base whitespace-nowrap">
+                                <i class="fas fa-arrow-left mr-1 lg:mr-2 text-xs lg:text-sm"></i>Back
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- Project Header -->
-            <div class="bg-white rounded-2xl lg:rounded-3xl shadow-lg border border-gray-100 p-6 lg:p-8 mb-6 lg:mb-8">
-                <div class="flex items-start justify-between mb-6">
+            <div class="bg-white rounded-2xl lg:rounded-3xl shadow-lg border border-gray-100 p-4 lg:p-8 mb-4 lg:mb-8">
+                <div class="flex items-start justify-between mb-4 lg:mb-6">
                     <div class="flex-1">
-                        <div class="flex items-center space-x-4 mb-4">
-                            <span class="px-4 py-2 text-sm font-medium rounded-full
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3 lg:mb-4">
+                            <span class="px-3 py-1.5 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-full inline-block
                                 @if($project->status === 'active') bg-green-100 text-green-800
                                 @elseif($project->status === 'completed') bg-blue-100 text-blue-800
                                 @elseif($project->status === 'on_hold') bg-yellow-100 text-yellow-800
@@ -65,51 +65,52 @@
                                 @method('PUT')
                                 <input type="hidden" name="status" value="completed">
                                 <button type="button" 
-                                        class="complete-project-btn px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-medium rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>Mark as Complete</span>
+                                        class="complete-project-btn px-3 py-1.5 lg:px-4 lg:py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xs lg:text-sm font-medium rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-1.5 lg:gap-2 whitespace-nowrap">
+                                    <i class="fas fa-check-circle text-xs lg:text-sm"></i>
+                                    <span class="hidden sm:inline">Mark as Complete</span>
+                                    <span class="sm:hidden">Complete</span>
                                 </button>
                             </form>
                             @endif
                         </div>
                         
-                        <p class="text-gray-600 text-lg mb-6">{{ $project->description }}</p>
+                        <p class="text-gray-600 text-sm lg:text-lg mb-4 lg:mb-6 line-clamp-3 lg:line-clamp-none">{{ $project->description }}</p>
                         
                         <!-- Project Creator -->
-                        <div class="flex items-center space-x-3 mb-4">
+                        <div class="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4">
                             <x-user-avatar :user="$project->user" size="md" />
-                            <div>
-                                <p class="font-medium text-gray-800">{{ $project->user->name }}</p>
-                                <p class="text-sm text-gray-500">Project Creator • {{ $project->user->role }}</p>
+                            <div class="min-w-0 flex-1">
+                                <p class="font-medium text-gray-800 text-sm lg:text-base truncate">{{ $project->user->name }}</p>
+                                <p class="text-xs lg:text-sm text-gray-500">Project Creator • {{ $project->user->role }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Project Timeline -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-calendar-plus text-blue-600"></i>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 lg:gap-6">
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 lg:p-4 rounded-xl">
+                        <div class="flex items-center gap-2 lg:gap-3">
+                            <div class="w-8 h-8 lg:w-10 lg:h-10 bg-blue-100 rounded-lg lg:rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-calendar-plus text-blue-600 text-xs lg:text-base"></i>
                             </div>
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-600 mb-1">Start Date</h3>
-                                <p class="text-lg font-bold text-indigo-600">
+                            <div class="min-w-0 flex-1">
+                                <h3 class="text-xs lg:text-sm font-medium text-gray-600 mb-0.5 lg:mb-1">Start Date</h3>
+                                <p class="text-sm lg:text-lg font-bold text-indigo-600 truncate">
                                     {{ $project->created_at ? $project->created_at->format('M j, Y') : 'Not set' }}
                                 </p>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-calendar-times text-purple-600"></i>
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-3 lg:p-4 rounded-xl">
+                        <div class="flex items-center gap-2 lg:gap-3">
+                            <div class="w-8 h-8 lg:w-10 lg:h-10 bg-purple-100 rounded-lg lg:rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-calendar-times text-purple-600 text-xs lg:text-base"></i>
                             </div>
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-600 mb-1">Deadline</h3>
-                                <p class="text-lg font-bold {{ $project->deadline && $project->deadline->isPast() && $project->status === 'active' ? 'text-red-600' : 'text-purple-600' }}">
+                            <div class="min-w-0 flex-1">
+                                <h3 class="text-xs lg:text-sm font-medium text-gray-600 mb-0.5 lg:mb-1">Deadline</h3>
+                                <p class="text-sm lg:text-lg font-bold {{ $project->deadline && $project->deadline->isPast() && $project->status === 'active' ? 'text-red-600' : 'text-purple-600' }} truncate">
                                     {{ $project->deadline ? $project->deadline->format('M j, Y') : 'Not set' }}
                                 </p>
                                 @if($project->deadline && $project->status === 'active')
@@ -121,14 +122,14 @@
                         </div>
                     </div>
                     
-                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-users text-green-600"></i>
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-3 lg:p-4 rounded-xl">
+                        <div class="flex items-center gap-2 lg:gap-3">
+                            <div class="w-8 h-8 lg:w-10 lg:h-10 bg-green-100 rounded-lg lg:rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-users text-green-600 text-xs lg:text-base"></i>
                             </div>
-                            <div>
-                                <h3 class="text-sm font-medium text-gray-600 mb-1">Team Size</h3>
-                                <p class="text-lg font-bold text-green-600">{{ $project->members->count() }} Members</p>
+                            <div class="min-w-0 flex-1">
+                                <h3 class="text-xs lg:text-sm font-medium text-gray-600 mb-0.5 lg:mb-1">Team Size</h3>
+                                <p class="text-sm lg:text-lg font-bold text-green-600">{{ $project->members->count() }} Members</p>
                             </div>
                         </div>
                     </div>
@@ -136,42 +137,42 @@
             </div>
 
             <!-- Team Members Section -->
-            <div class="bg-white rounded-2xl lg:rounded-3xl shadow-lg border border-gray-100 p-6 lg:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-xl lg:text-2xl font-bold text-gray-800 flex items-center space-x-3">
-                        <i class="fas fa-users text-indigo-600"></i>
+            <div class="bg-white rounded-2xl lg:rounded-3xl shadow-lg border border-gray-100 p-4 lg:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 lg:gap-0 mb-4 lg:mb-6">
+                    <h2 class="text-lg lg:text-2xl font-bold text-gray-800 flex items-center gap-2 lg:gap-3">
+                        <i class="fas fa-users text-indigo-600 text-base lg:text-xl"></i>
                         <span>Team Members</span>
                     </h2>
                     <div class="flex items-center space-x-2">
-                        <span class="text-sm text-gray-600">Total:</span>
-                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
+                        <span class="text-xs lg:text-sm text-gray-600">Total:</span>
+                        <span class="px-2 py-1 lg:px-3 lg:py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs lg:text-sm font-medium">
                             {{ $project->members->count() }} members
                         </span>
                     </div>
                 </div>
 
                 @if($project->members->count() > 0)
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-6">
                         @foreach($project->members as $member)
-                            <div class="bg-gradient-to-r from-gray-50 to-white p-6 rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-200">
-                                <div class="flex items-center space-x-4 mb-4">
+                            <div class="bg-gradient-to-r from-gray-50 to-white p-4 lg:p-6 rounded-xl lg:rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-200">
+                                <div class="flex items-center gap-2 lg:gap-4 mb-3 lg:mb-4">
                                     <x-user-avatar :user="$member->user" size="lg" />
-                                    <div class="flex-1">
-                                        <h4 class="font-bold text-gray-800">{{ $member->user->name }}</h4>
-                                        <p class="text-sm text-gray-600 capitalize">{{ $member->user->role }}</p>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="font-bold text-gray-800 text-sm lg:text-base truncate">{{ $member->user->name }}</h4>
+                                        <p class="text-xs lg:text-sm text-gray-600 capitalize">{{ $member->user->role }}</p>
                                     </div>
                                 </div>
 
                                 <!-- Member Status -->
-                                <div class="flex items-center justify-between">
-                                    <span class="px-3 py-1 text-xs font-medium rounded-full
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                    <span class="px-2 py-1 lg:px-3 lg:py-1 text-xs font-medium rounded-full inline-block
                                         @if($member->user->status === 'free') bg-green-100 text-green-700
                                         @elseif($member->user->status === 'working') bg-blue-100 text-blue-700
                                         @else bg-gray-100 text-gray-700 @endif">
                                         {{ ucfirst($member->user->status) }}
                                     </span>
                                     
-                                    <div class="text-xs text-gray-500">
+                                    <div class="text-xs text-gray-500 truncate">
                                         @if($member->user->email)
                                             {{ $member->user->email }}
                                         @endif
@@ -179,7 +180,7 @@
                                 </div>
 
                                 <!-- Member Details -->
-                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                <div class="mt-3 lg:mt-4 pt-3 lg:pt-4 border-t border-gray-200">
                                     <div class="grid grid-cols-2 gap-4 text-xs">
                                         <div>
                                             <p class="text-gray-500">Joined</p>
@@ -202,12 +203,12 @@
                     </div>
                 @else
                     <!-- No Members State -->
-                    <div class="text-center py-8 lg:py-12">
-                        <div class="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-r from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-user-friends text-2xl lg:text-3xl text-gray-400"></i>
+                    <div class="text-center py-6 lg:py-12">
+                        <div class="w-12 h-12 lg:w-20 lg:h-20 bg-gradient-to-r from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-3 lg:mb-4">
+                            <i class="fas fa-user-friends text-lg lg:text-3xl text-gray-400"></i>
                         </div>
-                        <h3 class="text-lg lg:text-xl font-bold text-gray-600 mb-2">No Team Members</h3>
-                        <p class="text-gray-500">This project doesn't have any team members assigned yet.</p>
+                        <h3 class="text-base lg:text-xl font-bold text-gray-600 mb-2">No Team Members</h3>
+                        <p class="text-sm lg:text-base text-gray-500">This project doesn't have any team members assigned yet.</p>
                     </div>
                 @endif
             </div>

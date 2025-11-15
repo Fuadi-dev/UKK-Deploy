@@ -27,7 +27,8 @@
         <!-- Top Header Bar -->
         <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-white/20 p-4">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <!-- Breadcrumb - Hidden on mobile -->
+                <div class="hidden md:flex items-center space-x-2 text-sm text-gray-600">
                     <a href="{{ route('dashboard') }}" class="hover:text-indigo-600 transition-colors">Home</a>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -35,12 +36,15 @@
                     <span class="font-medium text-indigo-600">My Cards</span>
                 </div>
                 
+                <!-- Mobile: Simple Title -->
+                <h2 class="md:hidden text-base font-bold text-gray-800">📋 My Cards</h2>
+                
                 <!-- Header Actions -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2 lg:space-x-4">
                     <!-- User Profile -->
                     <div class="flex items-center space-x-2 p-2 rounded-xl hover:bg-white/50 transition-colors">
                         <x-user-avatar :user="Auth::user()" size="sm" />
-                        <span class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
+                        <span class="hidden md:inline text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
                     </div>
                 </div>
             </div>
@@ -49,24 +53,24 @@
         <!-- Main Content -->
         <main class="p-6">
             <!-- Page Header -->
-            <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 mb-8">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h1 class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+            <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 p-3 lg:p-8 mb-3 lg:mb-8">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between">
+                    <div class="mb-3 lg:mb-0">
+                        <h1 class="text-lg lg:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1 lg:mb-2">
                             My Assigned Cards
                         </h1>
-                        <p class="text-gray-600">Manage your assigned tasks and submit them for review</p>
+                        <p class="hidden lg:block text-gray-600 text-sm lg:text-base">Manage your assigned tasks and submit them for review</p>
                     </div>
-                    <div class="hidden md:flex items-center space-x-6">
+                    <div class="hidden lg:flex items-center space-x-6">
                         <!-- Status Summary -->
-                        <div class="grid grid-cols-4 gap-4">
-                            <div class="bg-gradient-to-r from-gray-50 to-slate-50 rounded-2xl p-6 border border-gray-100">
+                        <div class="grid grid-cols-2 xl:grid-cols-4 gap-3">
+                            <div class="bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl p-4 border border-gray-100">
                                 <div class="flex items-center justify-between">
                                     <div>
-                                        <p class="text-gray-600 text-sm font-medium">To Do</p>
-                                        <p class="text-2xl font-bold text-gray-700">{{ $cards->where('status', 'todo')->count() }}</p>
+                                        <p class="text-gray-600 text-xs font-medium">To Do</p>
+                                        <p class="text-xl font-bold text-gray-700">{{ $cards->where('status', 'todo')->count() }}</p>
                                     </div>
-                                    <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
                                         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                                         </svg>
@@ -74,13 +78,13 @@
                                 </div>
                             </div>
 
-                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
                                 <div class="flex items-center justify-between">
                                     <div>
-                                        <p class="text-blue-600 text-sm font-medium">In Progress</p>
-                                        <p class="text-2xl font-bold text-blue-700">{{ $cards->where('status', 'in_progress')->count() }}</p>
+                                        <p class="text-blue-600 text-xs font-medium">Progress</p>
+                                        <p class="text-xl font-bold text-blue-700">{{ $cards->where('status', 'in_progress')->count() }}</p>
                                     </div>
-                                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                                         <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
@@ -88,13 +92,13 @@
                                 </div>
                             </div>
 
-                            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100">
+                            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
                                 <div class="flex items-center justify-between">
                                     <div>
-                                        <p class="text-purple-600 text-sm font-medium">Review</p>
-                                        <p class="text-2xl font-bold text-purple-700">{{ $cards->where('status', 'review')->count() }}</p>
+                                        <p class="text-purple-600 text-xs font-medium">Review</p>
+                                        <p class="text-xl font-bold text-purple-700">{{ $cards->where('status', 'review')->count() }}</p>
                                     </div>
-                                    <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                                         <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                         </svg>
@@ -102,13 +106,13 @@
                                 </div>
                             </div>
 
-                            <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-100">
+                            <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
                                 <div class="flex items-center justify-between">
                                     <div>
-                                        <p class="text-green-600 text-sm font-medium">Completed</p>
-                                        <p class="text-2xl font-bold text-green-700">{{ $cards->where('status', 'done')->count() }}</p>
+                                        <p class="text-green-600 text-xs font-medium">Done</p>
+                                        <p class="text-xl font-bold text-green-700">{{ $cards->where('status', 'done')->count() }}</p>
                                     </div>
-                                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                                         <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
@@ -122,27 +126,27 @@
 
             @if($cards->count() > 0)
                 <!-- Cards List -->
-                <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h2 class="text-2xl font-bold text-gray-800">My Task List</h2>
-                            <div class="text-sm text-gray-600">
+                <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+                    <div class="p-3 lg:p-6">
+                        <div class="flex items-center justify-between mb-3 lg:mb-6">
+                            <h2 class="text-base lg:text-2xl font-bold text-gray-800">My Task List</h2>
+                            <div class="hidden lg:block text-sm text-gray-600">
                                 Click the checkbox to submit tasks for review
                             </div>
                         </div>
                         
-                        <div class="space-y-4">
+                        <div class="space-y-2 lg:space-y-4">
                             @foreach($cards as $card)
-                                <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/40 hover:shadow-lg transition-all duration-200" data-card-id="{{ $card->id }}">
-                                    <div class="flex items-start justify-between mb-4">
-                                        <div class="flex items-start space-x-4 flex-1">
+                                <div class="bg-white/60 backdrop-blur-sm rounded-xl lg:rounded-2xl p-3 lg:p-6 border border-white/40 hover:shadow-lg transition-all duration-200" data-card-id="{{ $card->id }}">
+                                    <div class="flex items-start gap-2 lg:gap-4 mb-2 lg:mb-4">
+                                        <div class="flex items-start space-x-2 lg:space-x-4 flex-1 min-w-0">
                                             <!-- Checkbox for submitting to review or Start Work button -->
-                                            <div class="flex-shrink-0 mt-1">
+                                            <div class="flex-shrink-0 mt-0.5 lg:mt-1">
                                                 @if($card->status === 'todo')
-                                                    <button class="start-work-btn w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors" 
+                                                    <button class="start-work-btn w-7 h-7 lg:w-8 lg:h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors" 
                                                             data-card-id="{{ $card->id }}" title="Start Work">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                                            <path d="M8 5v14l11-7z"/>
                                                         </svg>
                                                     </button>
                                                 @elseif($card->status === 'in_progress')
@@ -172,14 +176,14 @@
                                                 @endif
                                             </div>
                                             
-                                            <div class="flex-1">
-                                                <h3 class="text-lg font-semibold text-gray-800 mb-1">{{ $card->card_title }}</h3>
-                                                <p class="text-sm text-gray-600 mb-3">Project: {{ $card->board->project->project_name }}</p>
+                                            <div class="flex-1 min-w-0 overflow-hidden">
+                                                <h3 class="text-sm lg:text-lg font-semibold text-gray-800 mb-1 truncate line-clamp-1">{{ $card->card_title }}</h3>
+                                                <p class="text-xs lg:text-sm text-gray-600 mb-2 lg:mb-3 truncate">{{ $card->board->project->project_name }}</p>
                                                 
-                                                <div class="flex items-center space-x-3 mb-3">
+                                                <div class="flex items-center flex-wrap gap-1.5 lg:gap-3 mb-2 lg:mb-3">
                                                     <!-- Priority Badge -->
                                                     @if($card->priority)
-                                                        <span class="px-3 py-1 text-xs font-medium rounded-full
+                                                        <span class="px-2 py-0.5 lg:px-3 lg:py-1 text-xs font-medium rounded-full
                                                             @if($card->priority === 'high') bg-red-100 text-red-800
                                                             @elseif($card->priority === 'medium') bg-yellow-100 text-yellow-800
                                                             @else bg-green-100 text-green-800
@@ -202,19 +206,19 @@
                                                         @endif
                                                     </span>
 
-                                                    <!-- Board Badge -->
-                                                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">
+                                                    <!-- Board Badge - Hidden on mobile -->
+                                                    <span class="hidden lg:inline-flex px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700">
                                                         Board: {{ $card->board->board_name }}
                                                     </span>
                                                 </div>
 
-                                                <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                                                <div class="grid grid-cols-2 gap-2 lg:gap-4 text-xs lg:text-sm text-gray-600">
                                                     @if($card->due_date)
-                                                        <div class="flex items-center space-x-2">
-                                                            <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <div class="flex items-center space-x-1 lg:space-x-2">
+                                                            <svg class="w-3 h-3 lg:w-4 lg:h-4 text-purple-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                                             </svg>
-                                                            <span>Due: {{ \Carbon\Carbon::parse($card->due_date)->format('M d, Y') }}</span>
+                                                            <span class="truncate">{{ \Carbon\Carbon::parse($card->due_date)->format('M d') }}</span>
                                                         </div>
                                                     @endif
                                                     
@@ -225,6 +229,16 @@
                                                             </svg>
                                                             <span>{{ $card->estimated_hours }}h estimated</span>
                                                         </div>
+                                                        @if($card->status === 'in_progress')
+                                                        <div class="flex items-center space-x-2 text-orange-600 font-semibold">
+                                                            <svg class="w-4 h-4 text-orange-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                            </svg>
+                                                            <span class="countdown-timer" data-card-id="{{ $card->id }}" data-estimated-hours="{{ $card->estimated_hours }}" data-start-time="{{ $card->start_time ?? now() }}">
+                                                                Calculating...
+                                                            </span>
+                                                        </div>
+                                                        @endif
                                                     @endif
                                                     
                                                     <div class="flex items-center space-x-2">
@@ -243,31 +257,32 @@
                                                 </div>
 
                                                 @if($card->description)
-                                                    <div class="mt-3 p-3 bg-gray-50 rounded-xl">
+                                                    <div class="hidden lg:block mt-3 p-3 bg-gray-50 rounded-xl">
                                                         <p class="text-sm text-gray-700">{{ Str::limit($card->description, 100) }}</p>
                                                     </div>
                                                 @endif
                                             </div>
                                         </div>
                                         
-                                        <!-- Action Buttons -->
-                                        <div class="flex items-center space-x-2 ml-4">
+                                        <!-- Action Buttons - Always visible -->
+                                        <div class="flex flex-col lg:flex-row items-center gap-1 lg:gap-2 flex-shrink-0">
                                             <button onclick="viewCardDetails({{ $card->id }})" 
-                                                    class="p-3 bg-blue-100 text-blue-600 rounded-xl hover:bg-blue-200 transition-colors">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    class="p-2 lg:p-3 bg-blue-100 text-blue-600 rounded-lg lg:rounded-xl hover:bg-blue-200 transition-colors"
+                                                    title="View Details">
+                                                <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                                 </svg>
                                             </button>
                                             
                                             <button onclick="openCommentsModal({{ $card->id }})" 
-                                                    class="relative p-3 bg-green-100 text-green-600 rounded-xl hover:bg-green-200 transition-colors"
+                                                    class="relative p-2 lg:p-3 bg-green-100 text-green-600 rounded-lg lg:rounded-xl hover:bg-green-200 transition-colors"
                                                     title="Comments">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                                 </svg>
                                                 @if($card->comments->count() > 0)
-                                                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg">
+                                                    <span class="absolute -top-1 -right-1 lg:-top-2 lg:-right-2 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 lg:w-5 lg:h-5 flex items-center justify-center shadow-lg">
                                                         {{ $card->comments->count() }}
                                                     </span>
                                                 @endif
@@ -281,16 +296,16 @@
                 </div>
 
                 <!-- Info Box -->
-                <div class="mt-6 p-6 bg-blue-50 border border-blue-200 rounded-3xl">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-6 h-6 text-blue-600 mt-1">
+                <div class="mt-3 lg:mt-6 p-3 lg:p-6 bg-blue-50 border border-blue-200 rounded-2xl lg:rounded-3xl">
+                    <div class="flex items-start space-x-2 lg:space-x-4">
+                        <div class="w-5 h-5 lg:w-6 lg:h-6 text-blue-600 mt-0.5 lg:mt-1 flex-shrink-0">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
-                        <div>
-                            <h4 class="font-semibold text-blue-800 text-lg mb-2">How to Submit Tasks for Review</h4>
-                            <div class="text-blue-700 text-sm space-y-1">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-semibold text-blue-800 text-sm lg:text-lg mb-1 lg:mb-2">How to Submit Tasks</h4>
+                            <div class="text-blue-700 text-xs lg:text-sm space-y-0.5 lg:space-y-1">
                                 <p><strong>1.</strong> Complete your assigned tasks</p>
                                 <p><strong>2.</strong> Click the checkbox next to tasks that are ready for review</p>
                                 <p><strong>3.</strong> Tasks will automatically move to the Review board</p>
@@ -302,16 +317,16 @@
                 </div>
 
                 <!-- Actual Hours Info Box -->
-                <div class="mt-6 p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-3xl">
-                    <div class="flex items-start space-x-4">
-                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div class="mt-3 lg:mt-6 p-3 lg:p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-2xl lg:rounded-3xl">
+                    <div class="flex items-start space-x-2 lg:space-x-4">
+                        <div class="w-6 h-6 lg:w-8 lg:h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
                             <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
-                        <div>
-                            <h4 class="font-semibold text-purple-800 text-lg mb-2">⏱️ Automatic Time Tracking</h4>
-                            <div class="text-purple-700 text-sm space-y-1">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-semibold text-purple-800 text-sm lg:text-lg mb-1 lg:mb-2">⏱️ Time Tracking</h4>
+                            <div class="text-purple-700 text-xs lg:text-sm space-y-0.5 lg:space-y-1">
                                 <p><strong>🎯 Smart Calculation:</strong> Actual hours are automatically calculated when your task is approved by the project leader</p>
                                 <p><strong>� Start Tracking:</strong> Time tracking begins when you start working (change status from "To Do" to "In Progress")</p>
                                 <p><strong>�📅 Work Hours Only:</strong> System counts working hours (9 AM - 5 PM, Monday-Friday) from start to completion</p>
@@ -434,6 +449,14 @@
                 const checkmark = checkbox.closest('label').querySelector('.checkmark');
 
                 if (checkbox.checked) {
+                    // Check if currently in working hours
+                    if (!this.isCurrentlyWorkingHours()) {
+                        checkbox.checked = false;
+                        const message = this.getOutOfWorkHoursMessage();
+                        this.showError(message);
+                        return;
+                    }
+                    
                     const result = await Swal.fire({
                         title: 'Submit for Review?',
                         text: 'Are you sure you want to submit this task for review?',
@@ -489,6 +512,13 @@
                 const cardId = e.target.closest('button').dataset.cardId;
                 const button = e.target.closest('button');
                 
+                // Check if currently in working hours
+                if (!this.isCurrentlyWorkingHours()) {
+                    const message = this.getOutOfWorkHoursMessage();
+                    this.showError(message);
+                    return;
+                }
+                
                 // Show confirmation dialog
                 const result = await Swal.fire({
                     title: 'Start Working',
@@ -528,15 +558,15 @@
                             setTimeout(() => window.location.reload(), 1500);
                         } else {
                             // Re-enable button
-                            button.disabled = false;
-                            button.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
-                            this.showError(data.message || 'Failed to start work');
+                        button.disabled = false;
+                        button.innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+                        this.showError(data.message || 'Failed to start work');
                         }
                     } catch (error) {
                         console.error('Start work error:', error);
                         // Re-enable button
                         button.disabled = false;
-                        button.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+                        button.innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
                         this.showError('Failed to start work. Please try again.');
                     }
                 }
@@ -769,6 +799,36 @@
                     }
                 });
             }
+
+            isCurrentlyWorkingHours() {
+                const now = new Date();
+                const hour = now.getHours();
+                const day = now.getDay();
+                
+                // Check if weekday (Monday = 1, Friday = 5)
+                const isWeekday = day >= 1 && day <= 5;
+                
+                // Check if within working hours (8:00 - 16:00)
+                const isWorkHour = hour >= 8 && hour < 16;
+                
+                return isWeekday && isWorkHour;
+            }
+
+            getOutOfWorkHoursMessage() {
+                const now = new Date();
+                const hour = now.getHours();
+                const day = now.getDay();
+                
+                if (day === 0 || day === 6) {
+                    return '🏖️ Weekend! You can only start work or submit tasks during weekdays (Monday-Friday) from 08:00 to 16:00.';
+                } else if (hour < 8) {
+                    return '🌙 Too Early! Work hours start at 08:00. You can start working or submit tasks from 08:00 to 16:00.';
+                } else if (hour >= 16) {
+                    return '🌆 After Work Hours! Work hours end at 16:00. You can start working or submit tasks from 08:00 to 16:00 tomorrow.';
+                }
+                
+                return '⏰ Outside Working Hours! You can only work during weekdays (Monday-Friday) from 08:00 to 16:00.';
+            }
         }
 
         // Global functions
@@ -787,10 +847,168 @@
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             window.userCardManager = new UserCardManager();
+            initializeCountdownTimers();
         });
+
+        // Countdown Timer Implementation
+        function initializeCountdownTimers() {
+            const timers = document.querySelectorAll('.countdown-timer');
+            
+            timers.forEach(timer => {
+                const estimatedHours = parseFloat(timer.dataset.estimatedHours);
+                const startTime = new Date(timer.dataset.startTime);
+                
+                // Update countdown every second
+                const intervalId = setInterval(() => {
+                    updateCountdown(timer, startTime, estimatedHours, intervalId);
+                }, 1000);
+                
+                // Initial update
+                updateCountdown(timer, startTime, estimatedHours, intervalId);
+            });
+        }
+
+        function isWorkingHour(date) {
+            const hour = date.getHours();
+            const day = date.getDay();
+            
+            // Check if weekday (Monday = 1, Friday = 5)
+            const isWeekday = day >= 1 && day <= 5;
+            
+            // Check if within working hours (8:00 - 16:00)
+            const isWorkHour = hour >= 8 && hour < 16;
+            
+            return isWeekday && isWorkHour;
+        }
+
+        function calculateWorkingHoursRemaining(startTime, estimatedHours) {
+            const now = new Date();
+            let currentTime = new Date(startTime);
+            let hoursWorked = 0;
+            
+            // Calculate hours worked so far (only counting working hours)
+            while (currentTime < now) {
+                if (isWorkingHour(currentTime)) {
+                    hoursWorked += 1/3600; // Add 1 second in hours
+                }
+                currentTime = new Date(currentTime.getTime() + 1000); // Add 1 second
+                
+                // Optimization: skip non-working hours/days in chunks
+                const hour = currentTime.getHours();
+                const day = currentTime.getDay();
+                
+                // Skip to next day if after 16:00
+                if (hour >= 16) {
+                    currentTime.setHours(24, 0, 0, 0);
+                }
+                // Skip to Monday if weekend
+                else if (day === 0) { // Sunday
+                    currentTime.setDate(currentTime.getDate() + 1);
+                    currentTime.setHours(8, 0, 0, 0);
+                } else if (day === 6) { // Saturday
+                    currentTime.setDate(currentTime.getDate() + 2);
+                    currentTime.setHours(8, 0, 0, 0);
+                }
+                // Skip to 8:00 if before work hours
+                else if (hour < 8) {
+                    currentTime.setHours(8, 0, 0, 0);
+                }
+            }
+            
+            // Calculate remaining working hours needed
+            const remainingHours = estimatedHours - hoursWorked;
+            
+            return {
+                hoursWorked: hoursWorked,
+                remainingHours: Math.max(0, remainingHours)
+            };
+        }
+
+        function convertWorkingHoursToTime(workingHours) {
+            const workingHoursPerDay = 8; // 8:00 - 16:00 = 8 hours
+            
+            const days = Math.floor(workingHours / workingHoursPerDay);
+            const hours = Math.floor(workingHours % workingHoursPerDay);
+            const minutes = Math.floor((workingHours % 1) * 60);
+            const seconds = Math.floor(((workingHours % 1) * 60 % 1) * 60);
+            
+            return { days, hours, minutes, seconds };
+        }
+
+        function updateCountdown(timerElement, startTime, estimatedHours, intervalId) {
+            const now = new Date();
+            
+            // Check if currently in working hours
+            if (!isWorkingHour(now)) {
+                const hour = now.getHours();
+                const day = now.getDay();
+                
+                if (day === 0 || day === 6) {
+                    timerElement.innerHTML = '🏖️ Weekend - Timer Paused';
+                } else if (hour < 8) {
+                    timerElement.innerHTML = '🌙 Before Work Hours';
+                } else if (hour >= 16) {
+                    timerElement.innerHTML = '🌆 After Work Hours';
+                }
+                timerElement.classList.remove('text-orange-600', 'text-yellow-600', 'text-red-600');
+                timerElement.classList.add('text-gray-600');
+                return;
+            }
+            
+            // Calculate remaining working hours
+            const { hoursWorked, remainingHours } = calculateWorkingHoursRemaining(startTime, estimatedHours);
+            
+            if (remainingHours <= 0) {
+                clearInterval(intervalId);
+                timerElement.innerHTML = '<span class="text-red-600 font-bold">⏰ Time\'s Up!</span>';
+                timerElement.classList.add('animate-pulse');
+                return;
+            }
+            
+            // Convert to time format
+            const { days, hours, minutes, seconds } = convertWorkingHoursToTime(remainingHours);
+            
+            // Format display based on remaining time
+            let display = '';
+            if (days > 0) {
+                display = `⏳ ${days}d ${hours}h ${minutes}m left`;
+            } else if (hours > 0) {
+                display = `⏳ ${hours}h ${minutes}m ${seconds}s left`;
+            } else if (minutes > 0) {
+                display = `⏳ ${minutes}m ${seconds}s left`;
+            } else {
+                display = `⏳ ${seconds}s left`;
+            }
+            
+            // Change color based on urgency (in working hours)
+            timerElement.classList.remove('text-orange-600', 'text-yellow-600', 'text-red-600', 'text-gray-600');
+            if (remainingHours < 1) { // Less than 1 working hour
+                timerElement.classList.add('text-red-600');
+            } else if (remainingHours < 2) { // Less than 2 working hours
+                timerElement.classList.add('text-yellow-600');
+            } else {
+                timerElement.classList.add('text-orange-600');
+            }
+            
+            timerElement.textContent = display;
+        }
     </script>
 
     <style>
+        /* Prevent horizontal overflow */
+        body {
+            overflow-x: hidden;
+        }
+        
+        /* Line clamp utility */
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
         .submit-review-checkbox:checked + .checkbox-custom {
             background-color: #10b981;
             border-color: #10b981;
@@ -800,7 +1018,7 @@
             opacity: 1;
         }
         
-        /* Force modal width */
+        /* Responsive modal width */
         .modal-content {
             min-width: 800px !important;
             max-width: 1000px !important;
@@ -809,6 +1027,13 @@
         @media (max-width: 1024px) {
             .modal-content {
                 min-width: 90vw !important;
+                max-width: 95vw !important;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .modal-content {
+                min-width: 95vw !important;
                 max-width: 95vw !important;
             }
         }

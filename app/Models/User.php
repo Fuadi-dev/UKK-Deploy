@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Services\SupabaseStorageService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -100,6 +101,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get completed cards by user
+     */
+    public function completedCards()
+    {
+        return $this->hasMany(Card::class)->where('status', 'done');
+    }
+
+    /**
      * Get subtasks created by user
      */
     public function subtasks()
@@ -129,12 +138,24 @@ class User extends Authenticatable
     public function getAvatarUrl()
     {
         if ($this->avatar) {
-            // If avatar is a full URL (like Google avatar)
-            if (filter_var($this->avatar, FILTER_VALIDATE_URL)) {
+            // If avatar is a Google avatar URL
+            if (str_contains($this->avatar, 'googleusercontent.com')) {
                 return $this->avatar;
             }
-            // If avatar is a local file
-            return asset('storage/avatars/' . $this->avatar);
+            
+            // If avatar is stored in Supabase (format: avatars/filename.ext)
+            if (str_contains($this->avatar, '/')) {
+                $supabaseStorage = new SupabaseStorageService();
+                return $supabaseStorage->getPublicUrl($this->avatar);
+            }
+            
+            // Legacy: If avatar is a local file (for backward compatibility)
+            if (!filter_var($this->avatar, FILTER_VALIDATE_URL)) {
+                return asset('storage/avatars/' . $this->avatar);
+            }
+            
+            // If avatar is already a full URL
+            return $this->avatar;
         }
         
         return null;

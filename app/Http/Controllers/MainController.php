@@ -119,8 +119,8 @@ class MainController extends Controller
         $activeProjects = $myProjects->where('status', 'active')->count();
         $completedProjects = $myProjects->where('status', 'completed')->count();
         
-        // Team members count
-        $teamMembers = User::whereHas('projectMembers.project.members', function ($query) use ($user) {
+        // Team members count (original - not filtered)
+        $teamMembersCountOriginal = User::whereHas('projectMembers.project.members', function ($query) use ($user) {
             $query->where('user_id', $user->id)
                   ->where('role', 'Project Manager');
         })->where('id', '!=', $user->id)->count();
@@ -190,9 +190,78 @@ class MainController extends Controller
             ->take(5)
             ->get();
 
+        // Calculate fastest and slowest workers based on completed cards with time logs
+        $projectIds = $myProjects->pluck('id')->toArray();
+        
+        // Get all team members from leader's projects
+        $teamMemberIds = User::whereHas('projectMembers.project', function ($query) use ($projectIds) {
+            $query->whereIn('projects.id', $projectIds);
+        })->where('id', '!=', $user->id)
+            ->pluck('id')
+            ->toArray();
+
+        $userPerformance = [];
+        
+        foreach ($teamMemberIds as $memberId) {
+            // Get completed cards for this member in leader's projects
+            $completedCards = Card::where('user_id', $memberId)
+                ->where('status', 'done')
+                ->whereHas('board.project', function ($q) use ($projectIds) {
+                    $q->whereIn('projects.id', $projectIds);
+                })
+                ->get();
+            
+            if ($completedCards->count() > 0) {
+                $totalTime = 0;
+                $cardCount = 0;
+                
+                foreach ($completedCards as $card) {
+                    // Get time logs for this card
+                    $cardTimeLogs = TimeLog::whereNotNull('end_time')
+                        ->where('user_id', $memberId)
+                        ->whereHas('subtask', function ($q) use ($card) {
+                            $q->where('card_id', $card->id);
+                        })
+                        ->sum('duration_minutes');
+                    
+                    if ($cardTimeLogs > 0) {
+                        $totalTime += $cardTimeLogs;
+                        $cardCount++;
+                    }
+                }
+                
+                // Only add if user has time logs
+                if ($cardCount > 0 && $totalTime > 0) {
+                    $member = User::find($memberId);
+                    $avgTimePerCard = $totalTime / $cardCount;
+                    $userPerformance[] = [
+                        'user' => $member,
+                        'avg_time' => $avgTimePerCard,
+                        'completed_cards' => $cardCount,
+                        'total_hours' => round($totalTime / 60, 1)
+                    ];
+                }
+            }
+        }
+
+        // Sort by average time and get fastest and slowest
+        $fastestWorker = null;
+        $slowestWorker = null;
+        
+        if (count($userPerformance) >= 2) {
+            usort($userPerformance, function($a, $b) {
+                return $a['avg_time'] <=> $b['avg_time'];
+            });
+            
+            $fastestWorker = $userPerformance[0];
+            $slowestWorker = end($userPerformance);
+        } elseif (count($userPerformance) === 1) {
+            $fastestWorker = $userPerformance[0];
+        }
+
         $myProjectsCount = $totalProjects;
         $activeProjectsCount = $activeProjects;
-        $teamMembersCount = $teamMembers;
+        $teamMembersCount = $teamMembersCountOriginal;
 
         return compact(
             'myProjectsCount',
@@ -204,7 +273,9 @@ class MainController extends Controller
             'doneCards',
             'cardsNeedingReview',
             'teamPermissions',
-            'teamTimeLogs'
+            'teamTimeLogs',
+            'fastestWorker',
+            'slowestWorker'
         );
     }
 

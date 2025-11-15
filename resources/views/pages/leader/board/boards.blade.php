@@ -26,19 +26,19 @@
         <!-- Mobile Header Spacer -->
         <div class="lg:hidden h-16"></div>
         
-        <div class="container mx-auto px-4 py-8 lg:px-8">
+        <div class="container mx-auto px-3 py-4 lg:px-8 lg:py-8">
             @if($project)
                 <!-- Header Section -->
-                <div class="bg-white rounded-3xl shadow-xl border border-gray-100 mb-8 overflow-hidden">
-                    <div class="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-700 px-6 py-6 lg:px-8">
-                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <div class="bg-white rounded-2xl lg:rounded-3xl shadow-xl border border-gray-100 mb-4 lg:mb-8 overflow-hidden">
+                    <div class="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-700 px-4 py-4 lg:px-8 lg:py-6">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
                             <div>
-                                <h1 class="text-2xl lg:text-3xl font-bold text-white mb-2">{{ $project->project_name }} - Boards</h1>
+                                <h1 class="text-lg lg:text-3xl font-bold text-white mb-1 lg:mb-2 truncate">{{ $project->project_name }} - Boards</h1>
                                 <p class="text-purple-100">Manage your project boards and tasks</p>
                             </div>
-                            <div class="flex items-center space-x-4">
-                                <div class="bg-white/20 backdrop-blur-sm rounded-2xl px-4 py-2">
-                                    <span class="text-white font-semibold text-sm lg:text-base">Total Boards: {{ $boards->count() }}</span>
+                            <div class="flex items-center space-x-2 lg:space-x-4">
+                                <div class="bg-white/20 backdrop-blur-sm rounded-xl lg:rounded-2xl px-3 py-1.5 lg:px-4 lg:py-2">
+                                    <span class="text-white font-semibold text-xs lg:text-base">Total: {{ $boards->count() }}</span>
                                 </div>
                             </div>
                         </div>
@@ -47,21 +47,21 @@
 
                 @if($boards->count() > 0)
                     <!-- Boards Container -->
-                    <div class="flex space-x-6 overflow-x-auto pb-6" id="boards-container">
+                    <div class="flex space-x-3 lg:space-x-6 overflow-x-auto pb-4 lg:pb-6" id="boards-container">
                         @foreach($boards as $board)
-                            <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-white/20 min-w-80 max-w-80 flex-shrink-0" data-board-id="{{ $board->id }}">
+                            <div class="bg-white/80 backdrop-blur-lg rounded-xl lg:rounded-2xl shadow-lg border border-white/20 min-w-72 max-w-72 lg:min-w-80 lg:max-w-80 flex-shrink-0" data-board-id="{{ $board->id }}">
                                 <!-- Board Header -->
-                                <div class="p-6 border-b border-gray-100">
+                                <div class="p-4 lg:p-6 border-b border-gray-100">
                                     <div class="flex items-center justify-between mb-2">
-                                        <h3 class="text-xl font-bold text-gray-800">{{ $board->board_name }}</h3>
+                                        <h3 class="text-base lg:text-xl font-bold text-gray-800 truncate">{{ $board->board_name }}</h3>
                                     </div>
                                     @if($board->description)
-                                        <p class="text-sm text-gray-600 mb-4">{{ $board->description }}</p>
+                                        <p class="text-xs lg:text-sm text-gray-600 mb-3 lg:mb-4 line-clamp-2">{{ $board->description }}</p>
                                     @endif
                                     <div class="flex items-center justify-between">
-                                        <span class="text-sm text-gray-500">{{ $board->cards->count() }} cards</span>
+                                        <span class="text-xs lg:text-sm text-gray-500">{{ $board->cards->count() }} cards</span>
                                         <a href="{{ route('leader.cards') }}" 
-                                           class="bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-1 rounded-lg text-sm transition-colors flex items-center space-x-1">
+                                           class="bg-purple-100 hover:bg-purple-200 text-purple-700 px-2 py-1 lg:px-3 rounded-lg text-xs lg:text-sm transition-colors flex items-center space-x-1">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -72,13 +72,13 @@
                                 </div>
 
                                 <!-- Cards Container -->
-                                <div class="p-6 space-y-4 max-h-96 overflow-y-auto" id="cards-container-{{ $board->id }}">
+                                <div class="p-3 lg:p-6 space-y-3 lg:space-y-4 max-h-80 lg:max-h-96 overflow-y-auto" id="cards-container-{{ $board->id }}">
                                     @forelse($board->cards as $card)
-                                        <div class="bg-gradient-to-r from-gray-50 to-white p-4 rounded-xl border border-gray-100 hover:shadow-md transition-all duration-200" 
+                                        <div class="bg-gradient-to-r from-gray-50 to-white p-3 lg:p-4 rounded-lg lg:rounded-xl border border-gray-100 hover:shadow-md transition-all duration-200" 
                                              data-card-id="{{ $card->id }}">
                                             <!-- Card Header -->
-                                            <div class="flex items-start justify-between mb-3">
-                                                <h4 class="font-semibold text-gray-800 flex-1">{{ $card->card_title }}</h4>
+                                            <div class="flex items-start justify-between mb-2 lg:mb-3">
+                                                <h4 class="font-semibold text-gray-800 flex-1 text-sm lg:text-base truncate pr-2">{{ $card->card_title }}</h4>
                                                 @php
                                                     $priorityClasses = [
                                                         'high' => 'bg-red-100 text-red-700',
@@ -87,30 +87,30 @@
                                                     ];
                                                     $priority = $card->priority ?? 'low';
                                                 @endphp
-                                                <span class="px-2 py-1 text-xs font-medium rounded-full ml-2 {{ $priorityClasses[$priority] }}">
+                                                <span class="px-1.5 py-0.5 lg:px-2 lg:py-1 text-[10px] lg:text-xs font-medium rounded-full ml-1 lg:ml-2 {{ $priorityClasses[$priority] }}">
                                                     {{ ucfirst($priority) }}
                                                 </span>
                                             </div>
 
                                             <!-- Card Description -->
                                             @if($card->description)
-                                                <p class="text-sm text-gray-600 mb-3 line-clamp-2">{{ $card->description }}</p>
+                                                <p class="text-xs lg:text-sm text-gray-600 mb-2 lg:mb-3 line-clamp-2">{{ $card->description }}</p>
                                             @endif
 
                                             <!-- Assigned User -->
                                             <div class="flex items-center justify-between">
-                                                <div class="flex items-center space-x-2">
+                                                <div class="flex items-center space-x-1.5 lg:space-x-2">
                                                     <x-user-avatar :user="$card->assignedUser" size="sm" />
                                                     <div>
-                                                        <p class="text-sm font-medium text-gray-800">{{ $card->assignedUser->name }}</p>
-                                                        <p class="text-xs text-gray-500">{{ $card->assignedUser->role }}</p>
+                                                        <p class="text-xs lg:text-sm font-medium text-gray-800 truncate">{{ $card->assignedUser->name }}</p>
+                                                        <p class="text-[10px] lg:text-xs text-gray-500">{{ $card->assignedUser->role }}</p>
                                                     </div>
                                                 </div>
                                                 
                                                 @if($card->due_date)
                                                     <div class="text-right">
-                                                        <p class="text-xs text-gray-500">Due</p>
-                                                        <p class="text-xs font-medium {{ $card->due_date->isPast() ? 'text-red-600' : 'text-gray-700' }}">
+                                                        <p class="text-[10px] lg:text-xs text-gray-500">Due</p>
+                                                        <p class="text-[10px] lg:text-xs font-medium {{ $card->due_date->isPast() ? 'text-red-600' : 'text-gray-700' }}">
                                                             {{ $card->due_date->format('M j') }}
                                                         </p>
                                                     </div>
@@ -118,19 +118,19 @@
                                             </div>
 
                                             <!-- Progress Info -->
-                                            <div class="mt-3 pt-3 border-t border-gray-200">
-                                                <div class="flex items-center justify-between text-xs">
+                                            <div class="mt-2 lg:mt-3 pt-2 lg:pt-3 border-t border-gray-200">
+                                                <div class="flex items-center justify-between text-[10px] lg:text-xs">
                                                     <span class="text-gray-500">{{ $card->subtasks->count() }} subtasks</span>
                                                     <span class="text-gray-500">{{ $card->actual_hours }}h / {{ $card->estimated_hours }}h</span>
                                                 </div>
                                             </div>
                                         </div>
                                     @empty
-                                        <div class="text-center py-8">
-                                            <svg class="w-8 h-8 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="text-center py-6 lg:py-8">
+                                            <svg class="w-6 h-6 lg:w-8 lg:h-8 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                             </svg>
-                                            <p class="text-sm text-gray-500">No cards yet</p>
+                                            <p class="text-xs lg:text-sm text-gray-500">No cards yet</p>
                                         </div>
                                     @endforelse
                                 </div>
@@ -139,15 +139,15 @@
                     </div>
                 @else
                     <!-- No Boards State -->
-                    <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-12 text-center">
+                    <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 p-6 lg:p-12 text-center">
                         <div class="max-w-md mx-auto">
-                            <div class="w-24 h-24 bg-gradient-to-r from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <svg class="w-12 h-12 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-16 h-16 lg:w-24 lg:h-24 bg-gradient-to-r from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 lg:mb-6">
+                                <svg class="w-8 h-8 lg:w-12 lg:h-12 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-4">No Boards Yet</h3>
-                            <p class="text-gray-600 mb-6">
+                            <h3 class="text-xl lg:text-2xl font-bold text-gray-800 mb-3 lg:mb-4">No Boards Yet</h3>
+                            <p class="text-sm lg:text-base text-gray-600 mb-4 lg:mb-6">
                                 Boards will be automatically created when projects are set up.
                             </p>
                         </div>
@@ -155,20 +155,20 @@
                 @endif
             @else
                 <!-- No Project State -->
-                <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-12 text-center">
+                <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 p-6 lg:p-12 text-center">
                     <div class="max-w-md mx-auto">
-                        <div class="w-24 h-24 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <svg class="w-12 h-12 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-16 h-16 lg:w-24 lg:h-24 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 lg:mb-6">
+                            <svg class="w-8 h-8 lg:w-12 lg:h-12 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">No Project Assigned</h3>
-                        <p class="text-gray-600 mb-6">
+                        <h3 class="text-xl lg:text-2xl font-bold text-gray-800 mb-3 lg:mb-4">No Project Assigned</h3>
+                        <p class="text-sm lg:text-base text-gray-600 mb-4 lg:mb-6">
                             You need to be assigned to a project before you can manage boards.
                         </p>
                         <a href="{{ route('dashboard') }}" 
-                           class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2 mx-auto w-fit">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 lg:px-6 lg:py-3 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2 mx-auto w-fit text-sm lg:text-base">
+                            <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v1H8V5z"></path>
                             </svg>

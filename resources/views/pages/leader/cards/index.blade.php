@@ -23,23 +23,23 @@
         <!-- Mobile Header Spacer -->
         <div class="lg:hidden h-16"></div>
         
-        <div class="container mx-auto px-4 py-8 lg:px-8">
+        <div class="container mx-auto px-3 py-4 lg:px-8 lg:py-8">
             @if($project)
                 <!-- Header Section -->
-                <div class="bg-white rounded-3xl shadow-xl border border-gray-100 mb-8 overflow-hidden">
-                    <div class="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-700 px-6 py-6 lg:px-8">
-                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <div class="bg-white rounded-2xl lg:rounded-3xl shadow-xl border border-gray-100 mb-4 lg:mb-8 overflow-hidden">
+                    <div class="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-700 px-4 py-4 lg:px-8 lg:py-6">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
                             <div>
-                                <h1 class="text-2xl lg:text-3xl font-bold text-white mb-2">{{ $project->project_name }} - Cards</h1>
-                                <p class="text-purple-100">Create and manage task assignments for your team</p>
+                                <h1 class="text-lg lg:text-3xl font-bold text-white mb-1 lg:mb-2 truncate">{{ $project->project_name }} - Cards</h1>
+                                <p class="text-purple-100 text-xs lg:text-base">Create and manage task assignments for your team</p>
                             </div>
-                            <div class="flex items-center space-x-4">
-                                <div class="bg-white/20 backdrop-blur-sm rounded-2xl px-4 py-2">
-                                    <span class="text-white font-semibold text-sm lg:text-base">Total Cards: {{ $cards->count() }}</span>
+                            <div class="flex items-center space-x-2 lg:space-x-4">
+                                <div class="bg-white/20 backdrop-blur-sm rounded-xl lg:rounded-2xl px-3 py-1.5 lg:px-4 lg:py-2">
+                                    <span class="text-white font-semibold text-xs lg:text-base">Total: {{ $cards->count() }}</span>
                                 </div>
                                 <button onclick="openCreateCardModal()" 
-                                        class="bg-white text-purple-600 px-4 py-2 lg:px-6 lg:py-3 rounded-2xl font-semibold hover:bg-gray-50 transition-all duration-200 shadow-lg text-sm lg:text-base">
-                                    <i class="fas fa-plus mr-1 lg:mr-2"></i>New Task
+                                        class="bg-white text-purple-600 px-3 py-1.5 lg:px-6 lg:py-3 rounded-xl lg:rounded-2xl font-semibold hover:bg-gray-50 transition-all duration-200 shadow-lg text-xs lg:text-base">
+                                    <i class="fas fa-plus mr-1 lg:mr-2"></i><span class="hidden sm:inline">New </span>Task
                                 </button>
                             </div>
                         </div>
@@ -47,8 +47,8 @@
                 </div>
 
                     <!-- Stats Cards -->
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-2 lg:gap-4 mb-4 lg:mb-6">
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl lg:rounded-2xl p-3 lg:p-6 border border-blue-100">
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-blue-600 text-sm font-medium">Total Cards</p>
@@ -62,56 +62,56 @@
                             </div>
                         </div>
 
-                        <div class="bg-gradient-to-r from-gray-50 to-slate-50 rounded-2xl p-6 border border-gray-100">
+                        <div class="bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl lg:rounded-2xl p-3 lg:p-6 border border-gray-100">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-gray-600 text-sm font-medium">To Do</p>
-                                    <p class="text-2xl font-bold text-gray-700">{{ $cards->where('status', 'todo')->count() }}</p>
+                                    <p class="text-gray-600 text-[10px] lg:text-sm font-medium">To Do</p>
+                                    <p class="text-lg lg:text-2xl font-bold text-gray-700">{{ $cards->where('status', 'todo')->count() }}</p>
                                 </div>
-                                <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-8 h-8 lg:w-12 lg:h-12 bg-gray-100 rounded-lg lg:rounded-xl flex items-center justify-center">
+                                    <svg class="w-4 h-4 lg:w-6 lg:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                                     </svg>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6 border border-yellow-100">
+                        <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl lg:rounded-2xl p-3 lg:p-6 border border-yellow-100">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-orange-600 text-sm font-medium">In Progress</p>
-                                    <p class="text-2xl font-bold text-orange-700">{{ $cards->where('status', 'in_progress')->count() }}</p>
+                                    <p class="text-orange-600 text-[10px] lg:text-sm font-medium">Progress</p>
+                                    <p class="text-lg lg:text-2xl font-bold text-orange-700">{{ $cards->where('status', 'in_progress')->count() }}</p>
                                 </div>
-                                <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-8 h-8 lg:w-12 lg:h-12 bg-orange-100 rounded-lg lg:rounded-xl flex items-center justify-center">
+                                    <svg class="w-4 h-4 lg:w-6 lg:h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100">
+                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl lg:rounded-2xl p-3 lg:p-6 border border-purple-100">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-purple-600 text-sm font-medium">Review</p>
-                                    <p class="text-2xl font-bold text-purple-700">{{ $cards->where('status', 'review')->count() }}</p>
+                                    <p class="text-purple-600 text-[10px] lg:text-sm font-medium">Review</p>
+                                    <p class="text-lg lg:text-2xl font-bold text-purple-700">{{ $cards->where('status', 'review')->count() }}</p>
                                 </div>
-                                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-8 h-8 lg:w-12 lg:h-12 bg-purple-100 rounded-lg lg:rounded-xl flex items-center justify-center">
+                                    <svg class="w-4 h-4 lg:w-6 lg:h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                     </svg>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-100">
+                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl lg:rounded-2xl p-3 lg:p-6 border border-green-100">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-green-600 text-sm font-medium">Completed</p>
-                                    <p class="text-2xl font-bold text-green-700">{{ $cards->where('status', 'done')->count() }}</p>
+                                    <p class="text-green-600 text-[10px] lg:text-sm font-medium">Done</p>
+                                    <p class="text-lg lg:text-2xl font-bold text-green-700">{{ $cards->where('status', 'done')->count() }}</p>
                                 </div>
-                                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div class="w-8 h-8 lg:w-12 lg:h-12 bg-green-100 rounded-lg lg:rounded-xl flex items-center justify-center">
+                                    <svg class="w-4 h-4 lg:w-6 lg:h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
@@ -122,18 +122,19 @@
 
                 @if($cards->count() > 0)
                     <!-- Cards List -->
-                        <div class="p-6">
-                            <div class="space-y-4">
+                    <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-xl border border-white/20">
+                        <div class="p-3 lg:p-6">
+                            <div class="space-y-3 lg:space-y-4">
                                 @foreach($cards as $card)
-                                    <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/40 hover:shadow-lg transition-all duration-200">
-                                        <div class="flex items-start justify-between mb-4">
-                                            <div class="flex items-start space-x-4 flex-1">
+                                    <div class="bg-white/60 backdrop-blur-sm rounded-xl lg:rounded-2xl p-3 lg:p-6 border border-white/40 hover:shadow-lg transition-all duration-200">
+                                        <div class="flex items-start justify-between gap-2 lg:gap-4 mb-3 lg:mb-4">
+                                            <div class="flex items-start space-x-2 lg:space-x-4 flex-1 min-w-0">
                                                 <div class="flex-shrink-0">
                                                     <x-user-avatar :user="$card->assignedUser" size="md" />
                                                 </div>
-                                                <div class="flex-1">
-                                                    <h3 class="text-lg font-semibold text-gray-800 mb-1">{{ $card->card_title }}</h3>
-                                                    <p class="text-sm text-gray-600 mb-3">Assigned to {{ $card->assignedUser->name }}</p>
+                                                <div class="flex-1 min-w-0">
+                                                    <h3 class="text-sm lg:text-lg font-semibold text-gray-800 mb-1 truncate">{{ $card->card_title }}</h3>
+                                                    <p class="text-xs lg:text-sm text-gray-600 mb-2 lg:mb-3 truncate">Assigned to {{ $card->assignedUser->name }}</p>
                                                     
                                                     <div class="flex items-center space-x-3 mb-3">
                                                         <!-- Priority Badge -->
@@ -148,7 +149,7 @@
                                                         @endif
 
                                                         <!-- Status Badge -->
-                                                        <span class="px-3 py-1 text-xs font-medium rounded-full
+                                                        <span class="px-2 py-0.5 lg:px-3 lg:py-1 text-[10px] lg:text-xs font-medium rounded-full
                                                             @if($card->status === 'done') bg-green-100 text-green-800
                                                             @elseif($card->status === 'review') bg-purple-100 text-purple-800
                                                             @else bg-blue-100 text-blue-800
@@ -160,49 +161,49 @@
                                             </div>
                                             
                                             <!-- Action Buttons -->
-                                            <div class="flex items-center space-x-2 ml-4">
+                                            <div class="flex items-start space-x-1 lg:space-x-2 flex-shrink-0">
                                                 <button onclick="openEditCardModal({{ $card->id }})" 
-                                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors relative" 
+                                                        class="p-1.5 lg:p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors relative" 
                                                         title="Edit Card">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                     </svg>
                                                 </button>
                                                 
                                                 <button onclick="openCommentsModal({{ $card->id }})" 
-                                                        class="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors relative" 
+                                                        class="p-1.5 lg:p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors relative" 
                                                         title="Comments">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                                     </svg>
                                                     @if($card->comments->count() > 0)
-                                                        <span class="absolute -top-1 -right-1 bg-purple-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                                        <span class="absolute -top-1 -right-1 bg-purple-500 text-white text-[10px] lg:text-xs rounded-full w-4 h-4 lg:w-5 lg:h-5 flex items-center justify-center">
                                                             {{ $card->comments->count() }}
                                                         </span>
                                                     @endif
                                                 </button>
                                                 
                                                 <button onclick="deleteCard({{ $card->id }})" 
-                                                        class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" 
+                                                        class="p-1.5 lg:p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" 
                                                         title="Delete Card">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                     </svg>
                                                 </button>
                                             </div>
                                         </div>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
-                                            <div class="flex items-center space-x-2">
-                                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 lg:gap-4 text-xs lg:text-sm text-gray-600">
+                                            <div class="flex items-center space-x-1.5 lg:space-x-2">
+                                                <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                                                 </svg>
                                                 <span>Board: {{ $card->board->board_name }}</span>
                                             </div>
                                             
                                             @if($card->due_date)
-                                                <div class="flex items-center space-x-2">
-                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <div class="flex items-center space-x-1.5 lg:space-x-2">
+                                                    <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                                     </svg>
                                                     <span>Due: {{ \Carbon\Carbon::parse($card->due_date)->format('M d, Y') }}</span>
@@ -210,8 +211,8 @@
                                             @endif
 
                                             @if($card->estimated_hours)
-                                                <div class="flex items-center space-x-2">
-                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <div class="flex items-center space-x-1.5 lg:space-x-2">
+                                                    <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                     </svg>
                                                     <span>Est: {{ $card->estimated_hours }}h</span>
@@ -220,14 +221,14 @@
                                         </div>
 
                                         @if($card->description)
-                                            <p class="mt-4 text-sm text-gray-600 bg-gray-50 rounded-lg p-3">{{ $card->description }}</p>
+                                            <p class="mt-3 lg:mt-4 text-xs lg:text-sm text-gray-600 bg-gray-50 rounded-lg p-2 lg:p-3 line-clamp-3">{{ $card->description }}</p>
                                         @endif
 
                                         <!-- Subtasks Preview -->
                                         @if($card->subtasks->count() > 0)
-                                            <div class="mt-4 pt-4 border-t border-gray-100">
-                                                <div class="flex items-center text-sm text-gray-600">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <div class="mt-3 lg:mt-4 pt-3 lg:pt-4 border-t border-gray-100">
+                                                <div class="flex items-center text-xs lg:text-sm text-gray-600">
+                                                    <svg class="w-3 h-3 lg:w-4 lg:h-4 mr-1.5 lg:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                                     </svg>
                                                     {{ $card->subtasks->count() }} subtask{{ $card->subtasks->count() > 1 ? 's' : '' }}
@@ -240,21 +241,23 @@
                                     </div>
                                 @endforeach
                             </div>
+                        </div>
+                    </div>
                 @else
                     <!-- No Cards State -->
-                    <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-12 text-center">
+                    <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 p-6 lg:p-12 text-center">
                         <div class="max-w-md mx-auto">
-                            <div class="w-24 h-24 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <svg class="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="w-16 h-16 lg:w-24 lg:h-24 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-4 lg:mb-6">
+                                <svg class="w-8 h-8 lg:w-12 lg:h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-4">No Tasks Yet</h3>
-                            <p class="text-gray-600 mb-6">
+                            <h3 class="text-xl lg:text-2xl font-bold text-gray-800 mb-3 lg:mb-4">No Tasks Yet</h3>
+                            <p class="text-sm lg:text-base text-gray-600 mb-4 lg:mb-6">
                                 Start organizing your project by creating tasks for your team members.
                             </p>
-                            <button onclick="openCreateCardModal()" class="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-6 py-3 rounded-xl hover:from-purple-600 hover:to-pink-700 transition-all duration-200 flex items-center space-x-2 mx-auto">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button onclick="openCreateCardModal()" class="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 lg:px-6 lg:py-3 rounded-xl hover:from-purple-600 hover:to-pink-700 transition-all duration-200 flex items-center space-x-2 mx-auto text-sm lg:text-base">
+                                <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
                                 <span>Create Your First Task</span>
@@ -264,20 +267,20 @@
                 @endif
             @else
                 <!-- No Project State -->
-                <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-12 text-center">
+                <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 p-6 lg:p-12 text-center">
                     <div class="max-w-md mx-auto">
-                        <div class="w-24 h-24 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <svg class="w-12 h-12 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-16 h-16 lg:w-24 lg:h-24 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 lg:mb-6">
+                            <svg class="w-8 h-8 lg:w-12 lg:h-12 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">No Project Assigned</h3>
-                        <p class="text-gray-600 mb-6">
+                        <h3 class="text-xl lg:text-2xl font-bold text-gray-800 mb-3 lg:mb-4">No Project Assigned</h3>
+                        <p class="text-sm lg:text-base text-gray-600 mb-4 lg:mb-6">
                             You need to be assigned to a project before you can manage cards.
                         </p>
                         <a href="{{ route('dashboard') }}" 
-                           class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2 mx-auto w-fit">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 lg:px-6 lg:py-3 rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2 mx-auto w-fit text-sm lg:text-base">
+                            <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v1H8V5z"></path>
                             </svg>

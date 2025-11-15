@@ -24,14 +24,25 @@
     <!-- Main Content Area -->
     <div class="lg:ml-64">
         <!-- Top Header Bar -->
-        <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-white/20 p-4">
+        <header class="bg-white/80 backdrop-blur-lg shadow-sm border-b border-white/20 p-3 lg:p-4">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <!-- Breadcrumb - Hidden on mobile -->
+                <div class="hidden md:flex items-center space-x-2 text-sm text-gray-600">
                     <a href="{{ route('projects') }}" class="hover:text-indigo-600 transition-colors">Projects</a>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                     <span class="font-medium text-indigo-600">Create New Project</span>
+                </div>
+                
+                <!-- Mobile: Show simple title with back button -->
+                <div class="md:hidden flex items-center space-x-2">
+                    <a href="{{ route('projects') }}" class="p-1 hover:bg-gray-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </a>
+                    <h2 class="text-lg font-bold text-gray-800">Create Project</h2>
                 </div>
                 
                 <!-- User Profile -->
@@ -42,7 +53,7 @@
         </header>
 
         <!-- Main Create Content -->
-        <main class="p-6">
+        <main class="p-3 lg:p-6">
             <!-- SweetAlert Success/Error Messages -->
             @if(session('success'))
                 <script>
@@ -103,15 +114,15 @@
             @endif
 
             <!-- Create Form -->
-            <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8">
-                <div class="mb-8">
-                    <h1 class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+            <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 p-4 lg:p-8">
+                <div class="mb-6 lg:mb-8">
+                    <h1 class="text-xl lg:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1 lg:mb-2">
                         Create New Project
                     </h1>
-                    <p class="text-gray-600">Start a new project and collaborate with your team</p>
+                    <p class="text-gray-600 text-sm lg:text-base hidden md:block">Start a new project and collaborate with your team</p>
                 </div>
 
-                <form action="{{ route('projects.store') }}" method="POST" class="space-y-6">
+                <form action="{{ route('projects.store') }}" method="POST" class="space-y-4 lg:space-y-6">
                     @csrf
 
                     <!-- Project Name -->
@@ -121,7 +132,7 @@
                                id="project_name" 
                                name="project_name" 
                                value="{{ old('project_name') }}"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                               class="w-full px-3 py-2.5 lg:px-4 lg:py-3 text-sm lg:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                                placeholder="Enter project name"
                                required>
                         @error('project_name')
@@ -134,8 +145,8 @@
                         <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                         <textarea id="description" 
                                   name="description" 
-                                  rows="4"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                                  rows="3"
+                                  class="w-full px-3 py-2.5 lg:px-4 lg:py-3 text-sm lg:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                                   placeholder="Enter project description (optional)">{{ old('description') }}</textarea>
                         @error('description')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -144,12 +155,12 @@
 
                     <!-- Project Leader -->
                     <div>
-                        <label for="leaderSearch" class="block text-sm font-medium text-gray-700 mb-2">Project Leader (Penanggung Jawab)</label>
+                        <label for="leaderSearch" class="block text-sm font-medium text-gray-700 mb-2">Project Leader</label>
                         <div class="relative">
                             <input type="text" 
                                    id="leaderSearch" 
-                                   class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
-                                   placeholder="Search for leaders only..."
+                                   class="w-full px-3 py-2.5 pr-10 lg:px-4 lg:py-3 text-sm lg:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                                   placeholder="Search for leaders..."
                                    autocomplete="off">
                             
                             <!-- Search icon -->
@@ -165,10 +176,10 @@
                             </div>
                             
                             <!-- Search results dropdown -->
-                            <div id="leaderSearchResults" class="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-64 overflow-y-auto z-20 hidden">
+                            <div id="leaderSearchResults" class="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-48 lg:max-h-64 overflow-y-auto z-20 hidden">
                                 <!-- No results message -->
-                                <div id="leaderNoResults" class="p-4 text-center text-gray-500 text-sm hidden">
-                                    <svg class="w-8 h-8 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div id="leaderNoResults" class="p-3 lg:p-4 text-center text-gray-500 text-sm hidden">
+                                    <svg class="w-6 h-6 lg:w-8 lg:h-8 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                     </svg>
                                     <p>No leaders found</p>
@@ -181,9 +192,9 @@
                         </div>
                         
                         <!-- Selected leader display -->
-                        <div id="selectedLeaderDisplay" class="mt-4 hidden">
-                            <div class="flex items-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3 overflow-hidden" id="selectedLeaderAvatarContainer">
+                        <div id="selectedLeaderDisplay" class="mt-3 lg:mt-4 hidden">
+                            <div class="flex items-center p-3 lg:p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl">
+                                <div class="w-8 h-8 lg:w-10 lg:h-10 rounded-full flex items-center justify-center mr-2 lg:mr-3 overflow-hidden flex-shrink-0" id="selectedLeaderAvatarContainer">
                                     <!-- Avatar image (hidden by default) -->
                                     <img id="selectedLeaderAvatar" class="w-full h-full object-cover rounded-full hidden" alt="Leader Avatar" onerror="this.style.display='none'; document.getElementById('selectedLeaderInitial').parentElement.style.display='flex';">
                                     <!-- Fallback initials -->
@@ -191,10 +202,10 @@
                                         <span id="selectedLeaderInitial" class="text-white font-semibold"></span>
                                     </div>
                                 </div>
-                                <div class="flex-1">
-                                    <div id="selectedLeaderName" class="font-medium text-gray-900"></div>
-                                    <div id="selectedLeaderEmail" class="text-sm text-gray-600"></div>
-                                    <div class="text-xs text-blue-600 uppercase font-medium">Project Leader</div>
+                                <div class="flex-1 min-w-0">
+                                    <div id="selectedLeaderName" class="font-medium text-gray-900 text-sm lg:text-base truncate"></div>
+                                    <div id="selectedLeaderEmail" class="text-xs lg:text-sm text-gray-600 truncate hidden md:block"></div>
+                                    <div class="text-xs text-blue-600 uppercase font-medium">Leader</div>
                                 </div>
                                 <button type="button" id="clearLeaderSelection" class="ml-2 p-1 text-gray-400 hover:text-gray-600 transition-colors">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,7 +216,7 @@
                         </div>
                         
                         <input type="hidden" id="selectedLeaderId" name="leader_id" value="">
-                        <p class="text-sm text-gray-500 mt-2">Select a leader who will be responsible for this project. This person will automatically become Project Manager.</p>
+                        <p class="text-xs lg:text-sm text-gray-500 mt-2 hidden md:block">Select a leader who will be responsible for this project. This person will automatically become Project Manager.</p>
                         @error('leader_id')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -218,7 +229,7 @@
                                id="deadline" 
                                name="deadline" 
                                value="{{ old('deadline') }}"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
+                               class="w-full px-3 py-2.5 lg:px-4 lg:py-3 text-sm lg:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                         @error('deadline')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -229,24 +240,24 @@
                         <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Project Status</label>
                         <select id="status" 
                                 name="status" 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
+                                class="w-full px-3 py-2.5 lg:px-4 lg:py-3 text-sm lg:text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200">
                             <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Active</option>
                             <option value="on_hold" {{ old('status') == 'on_hold' ? 'selected' : '' }}>On Hold</option>
                         </select>
-                        <p class="text-sm text-gray-500 mt-2">Select the initial status for this project. You can change it later from the project management page.</p>
+                        <p class="text-xs lg:text-sm text-gray-500 mt-2 hidden md:block">Select the initial status for this project. You can change it later from the project management page.</p>
                         @error('status')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Submit Buttons -->
-                    <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+                    <div class="flex flex-col-reverse md:flex-row items-center justify-between gap-3 pt-4 lg:pt-6 border-t border-gray-200">
                         <a href="{{ route('projects') }}" 
-                           class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-all duration-200 font-medium">
+                           class="w-full md:w-auto px-4 py-2.5 lg:px-6 lg:py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-all duration-200 font-medium text-sm lg:text-base text-center">
                             Cancel
                         </a>
                         <button type="submit" 
-                                class="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg">
+                                class="w-full md:w-auto px-6 py-2.5 lg:px-8 lg:py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl hover:from-indigo-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg text-sm lg:text-base">
                             Create Project
                         </button>
                     </div>
@@ -332,7 +343,7 @@
                     leaderNoResults.classList.remove('hidden');
                 } else {
                     leaderSearchResultsList.innerHTML = users.map(user => `
-                        <div class="leader-result p-3 ${user.is_working ? 'bg-gray-50 cursor-not-allowed opacity-60' : 'hover:bg-gray-50 cursor-pointer'} border-b last:border-b-0 transition-colors" 
+                        <div class="leader-result p-2 lg:p-3 ${user.is_working ? 'bg-gray-50 cursor-not-allowed opacity-60' : 'hover:bg-gray-50 cursor-pointer'} border-b last:border-b-0 transition-colors" 
                              data-user-id="${user.id}" 
                              data-user-name="${user.name}" 
                              data-user-email="${user.email}"
@@ -340,8 +351,8 @@
                              data-user-initials="${user.initials}"
                              data-user-working="${user.is_working || false}"
                              data-user-status="${user.status || 'available'}">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden relative">
+                            <div class="flex items-center space-x-2 lg:space-x-3">
+                                <div class="w-8 h-8 lg:w-10 lg:h-10 rounded-full flex items-center justify-center overflow-hidden relative flex-shrink-0">
                                     ${user.avatar_url ? 
                                         `<img src="${user.avatar_url}" alt="${user.name}" class="w-full h-full object-cover rounded-full" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                          <div class="w-full h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center" style="display: none;">
@@ -353,9 +364,9 @@
                                     }
                                     <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 ${user.is_working ? 'bg-orange-400' : 'bg-green-400'} rounded-full border border-white"></div>
                                 </div>
-                                <div class="flex-1">
-                                    <div class="font-medium text-gray-900">${user.name}</div>
-                                    <div class="text-sm text-gray-600">${user.email}</div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="font-medium text-gray-900 text-sm lg:text-base truncate">${user.name}</div>
+                                    <div class="text-xs lg:text-sm text-gray-600 truncate hidden md:block">${user.email}</div>
                                     <div class="flex items-center space-x-2">
                                         <div class="text-xs text-blue-600 uppercase font-medium">${user.role || 'User'}</div>
                                         <span class="px-2 py-1 text-xs font-medium ${user.is_working ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'} rounded-full capitalize">${user.status || 'available'}</span>

@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Card;
 use App\Models\TimeLog;
+use App\Models\User;
 use App\Observers\CardObserver;
 use App\Observers\TimeLogObserver;
+use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,5 +27,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Card::observe(CardObserver::class);
         TimeLog::observe(TimeLogObserver::class);
+        User::observe(UserObserver::class);
     }
 }
