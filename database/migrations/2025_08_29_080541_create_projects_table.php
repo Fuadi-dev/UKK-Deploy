@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('deadline')->nullable();
             $table->enum('status', ['active', 'completed', 'cancelled', 'on_hold', 'expired'])->default('active');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

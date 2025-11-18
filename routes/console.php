@@ -22,3 +22,12 @@ Schedule::call(function () {
 })->everyTenMinutes()
   ->name('update-project-status')
   ->withoutOverlapping();
+
+// Schedule permanent deletion of soft-deleted records older than 30 days
+Schedule::command('cleanup:soft-deleted')
+    ->daily()
+    ->at('00:00')
+    ->withoutOverlapping()
+    ->runInBackground()
+    ->name('cleanup-soft-deleted-records')
+    ->emailOutputOnFailure('admin@example.com');

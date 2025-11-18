@@ -26,6 +26,7 @@ return new class extends Migration
             $table->decimal('actual_hours', 5, 2)->default(0)->nullable();
             $table->timestamp('started_at')->nullable(); // When work actually begins (status changes to in_progress)
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

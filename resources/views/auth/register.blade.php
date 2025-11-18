@@ -90,7 +90,7 @@
         <!-- Password Field -->
         <div>
             <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
-                Password
+                Password <label class="text-xs font-normal text-gray-500">(min. 8 characters)</label>
             </label>
             <div class="relative">
                 <input 
