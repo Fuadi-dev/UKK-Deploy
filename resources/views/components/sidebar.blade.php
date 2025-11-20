@@ -60,9 +60,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">Projects</span>
-                {{-- <div class="ml-auto">
-                    <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">3</span>
-                </div> --}}
             </a>
         @endif
 
@@ -75,11 +72,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">My Project</span>
-                <div class="ml-auto">
-                    <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
-                        {{ Auth::user()->projectMembers()->count() > 0 ? '1' : '0' }}
-                    </span>
-                </div>
             </a>
         @endif
 
@@ -92,11 +84,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">Boards</span>
-                <div class="ml-auto">
-                    <span class="px-2 py-1 text-xs bg-amber-100 text-amber-800 rounded-full">
-                        {{ \App\Models\Board::whereHas('project.members', function($query) { $query->where('user_id', Auth::id()); })->count() }}
-                    </span>
-                </div>
             </a>
         @endif
 
@@ -109,11 +96,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">Cards</span>
-                <div class="ml-auto">
-                    <span class="px-2 py-1 text-xs bg-amber-100 text-amber-800 rounded-full">
-                        Tasks
-                    </span>
-                </div>
             </a>
         @endif
 
@@ -127,11 +109,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">Assigned Cards</span>
-                <div class="ml-auto">
-                    <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
-                        {{ \App\Models\Card::whereHas('board.project.members', function($q) { $q->where('user_id', Auth::id()); })->where('status', 'review')->count() }}
-                    </span>
-                </div>
             </a>
         @endif
 
@@ -144,12 +121,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">Assignment History</span>
-                <div class="ml-auto">
-                    @php
-                        $assignmentCount = \App\Models\CardAssignment::whereHas('card.board.project.members', function($q) { $q->where('user_id', Auth::id()); })->count();
-                    @endphp
-                    <span class="px-2 py-1 text-xs bg-pink-100 text-pink-800 rounded-full">{{ $assignmentCount }}</span>
-                </div>
             </a>
         @endif
 
@@ -162,12 +133,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">My Card</span>
-                <div class="ml-auto">
-                    @php
-                        $userCardCount = \App\Models\Card::where('user_id', auth()->id())->count();
-                    @endphp
-                    <span class="px-2 py-1 text-xs bg-amber-100 text-amber-800 rounded-full">{{ $userCardCount }}</span>
-                </div>
             </a>
         @endif
 
@@ -180,12 +145,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">My Subtasks</span>
-                <div class="ml-auto">
-                    @php
-                        $userSubtaskCount = \App\Models\Subtask::where('user_id', auth()->id())->count();
-                    @endphp
-                    <span class="px-2 py-1 text-xs bg-purple-100 text-purple-800 rounded-full">{{ $userSubtaskCount }}</span>
-                </div>
             </a>
         @endif
 
@@ -198,12 +157,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">My Permissions</span>
-                <div class="ml-auto">
-                    @php
-                        $userPermissionCount = \App\Models\Permission::where('user_id', auth()->id())->count();
-                    @endphp
-                    <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">{{ $userPermissionCount }}</span>
-                </div>
             </a>
         @endif
 
@@ -216,12 +169,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">Time Log</span>
-                <div class="ml-auto">
-                    @php
-                        $userTimeLogCount = \App\Models\TimeLog::where('user_id', auth()->id())->count();
-                    @endphp
-                    <span class="px-2 py-1 text-xs bg-emerald-100 text-emerald-800 rounded-full">{{ $userTimeLogCount }}</span>
-                </div>
             </a>
         @endif
 
@@ -235,12 +182,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">Card Time Logs</span>
-                <div class="ml-auto">
-                    @php
-                        $leaderTimeLogCount = \App\Models\TimeLog::where('user_id', auth()->id())->whereNotNull('card_id')->count();
-                    @endphp
-                    <span class="px-2 py-1 text-xs bg-emerald-100 text-emerald-800 rounded-full">{{ $leaderTimeLogCount }}</span>
-                </div>
             </a>
         @endif
 
@@ -253,15 +194,6 @@
                     </svg>
                 </div>
                 <span class="font-medium">Permission</span>
-                <div class="ml-auto">
-                    @php
-                        $leaderPermissionCount = \App\Models\Permission::whereHas('project.members', function ($query) {
-                            $query->where('user_id', auth()->id())
-                                  ->where('role', 'Project Manager');
-                        })->count();
-                    @endphp
-                    <span class="px-2 py-1 text-xs bg-indigo-100 text-indigo-800 rounded-full">{{ $leaderPermissionCount }}</span>
-                </div>
             </a>
         @endif
 
@@ -276,6 +208,16 @@
                     </svg>
                 </div>
                 <span class="font-medium">User Management</span>
+            </a>
+
+            <!-- Project Review -->
+            <a href="{{ route('review') }}" class="flex items-center space-x-3 px-3 py-3 rounded-xl text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:text-purple-800 transition-all duration-200 group {{ request()->routeIs('review*') ? 'bg-gradient-to-r from-purple-50 to-pink-50 text-purple-800 shadow-lg' : '' }}">
+                <div class="w-5 h-5 {{ request()->routeIs('review*') ? 'text-purple-600' : 'text-gray-400 group-hover:text-purple-600' }} transition-colors">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                    </svg>
+                </div>
+                <span class="font-medium">Project Review</span>
             </a>
 
             <!-- Reports -->

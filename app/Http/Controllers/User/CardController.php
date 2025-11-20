@@ -42,8 +42,8 @@ class CardController extends Controller
     {
         $user = Auth::user();
         
-        // Check if user owns this card
-        if ($card->user_id !== $user->id) {
+        // Check if user owns this card (use loose comparison for type safety)
+        if ($card->user_id != $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -109,8 +109,8 @@ class CardController extends Controller
     {
         $user = Auth::user();
         
-        // Check if user owns this card
-        if ($card->user_id !== $user->id) {
+        // Check if user owns this card (use loose comparison for type safety)
+        if ($card->user_id != $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -163,8 +163,8 @@ class CardController extends Controller
     {
         $user = Auth::user();
         
-        // Check if user owns this card
-        if ($card->user_id !== $user->id) {
+        // Check if user owns this card (use loose comparison for type safety)
+        if ($card->user_id != $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -183,8 +183,8 @@ class CardController extends Controller
     {
         $user = Auth::user();
         
-        // Check if user owns this card
-        if ($card->user_id !== $user->id) {
+        // Check if user owns this card (use loose comparison for type safety)
+        if ($card->user_id != $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -214,8 +214,8 @@ class CardController extends Controller
     {
         $user = Auth::user();
         
-        // Check if user owns this card
-        if ($card->user_id !== $user->id) {
+        // Check if user owns this card (use loose comparison for type safety)
+        if ($card->user_id != $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 

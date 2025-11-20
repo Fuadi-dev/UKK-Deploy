@@ -15,10 +15,13 @@ class Project extends Model
         'description',
         'deadline',
         'status',
+        'rejection_note',
+        'rejected_at',
     ];
 
     protected $casts = [
         'deadline' => 'datetime',
+        'rejected_at' => 'datetime',
     ];
 
     // Accessor for 'name' to use 'project_name'

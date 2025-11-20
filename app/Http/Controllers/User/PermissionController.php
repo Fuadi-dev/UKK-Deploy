@@ -118,7 +118,7 @@ class PermissionController extends Controller
     public function show(Permission $permission)
     {
         // Verify user owns this permission
-        if ($permission->user_id !== Auth::id()) {
+        if ($permission->user_id != Auth::id()) {
             abort(403, 'Unauthorized access to permission request.');
         }
 
@@ -131,7 +131,7 @@ class PermissionController extends Controller
     public function update(Request $request, Permission $permission)
     {
         // Verify user owns this permission and it's still pending
-        if ($permission->user_id !== Auth::id() || $permission->status !== 'pending') {
+        if ($permission->user_id != Auth::id() || $permission->status !== 'pending') {
             return response()->json([
                 'success' => false,
                 'message' => 'Cannot update this permission request.'
@@ -211,7 +211,7 @@ class PermissionController extends Controller
     public function destroy(Permission $permission)
     {
         // Verify user owns this permission and it's still pending
-        if ($permission->user_id !== Auth::id() || $permission->status !== 'pending') {
+        if ($permission->user_id != Auth::id() || $permission->status !== 'pending') {
             return response()->json([
                 'success' => false,
                 'message' => 'Cannot delete this permission request.'

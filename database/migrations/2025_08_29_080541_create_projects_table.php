@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('project_name');
             $table->text('description')->nullable();
             $table->date('deadline')->nullable();
-            $table->enum('status', ['active', 'completed', 'cancelled', 'on_hold', 'expired'])->default('active');
+            $table->enum('status', ['active', 'completed', 'cancelled', 'on_hold', 'review', 'expired'])->default('active');
+            $table->text('rejection_note')->nullable();
+            $table->timestamp('rejected_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

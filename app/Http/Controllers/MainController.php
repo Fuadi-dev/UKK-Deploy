@@ -259,6 +259,102 @@ class MainController extends Controller
             $fastestWorker = $userPerformance[0];
         }
 
+        // Calculate Top Performing Users (comprehensive metrics)
+        $topPerformers = [];
+        
+        foreach ($teamMemberIds as $memberId) {
+            $member = User::find($memberId);
+            if (!$member) continue;
+            
+            // Get completed cards count
+            $completedCardsCount = Card::where('user_id', $memberId)
+                ->where('status', 'done')
+                ->whereHas('board.project', function ($q) use ($projectIds) {
+                    $q->whereIn('projects.id', $projectIds);
+                })
+                ->count();
+            
+            if ($completedCardsCount === 0) continue;
+            
+            // Calculate total time logs
+            $totalMinutes = TimeLog::whereNotNull('end_time')
+                ->where('user_id', $memberId)
+                ->whereHas('subtask.card.board.project', function ($q) use ($projectIds) {
+                    $q->whereIn('projects.id', $projectIds);
+                })
+                ->sum('duration_minutes');
+            
+            // Calculate cards completed on time (before or on due date)
+            $onTimeCards = Card::where('user_id', $memberId)
+                ->where('status', 'done')
+                ->whereNotNull('due_date')
+                ->whereNotNull('updated_at')
+                ->whereRaw('updated_at <= due_date')
+                ->whereHas('board.project', function ($q) use ($projectIds) {
+                    $q->whereIn('projects.id', $projectIds);
+                })
+                ->count();
+            
+            // Calculate cards within estimated hours
+            $withinEstimateCards = 0;
+            $cardsWithEstimate = Card::where('user_id', $memberId)
+                ->where('status', 'done')
+                ->where('estimated_hours', '>', 0)
+                ->whereHas('board.project', function ($q) use ($projectIds) {
+                    $q->whereIn('projects.id', $projectIds);
+                })
+                ->get();
+            
+            foreach ($cardsWithEstimate as $card) {
+                if ($card->actual_hours <= $card->estimated_hours) {
+                    $withinEstimateCards++;
+                }
+            }
+            
+            // Calculate average completion time per card (in hours)
+            $avgCompletionTime = $completedCardsCount > 0 ? ($totalMinutes / 60) / $completedCardsCount : 0;
+            
+            // Calculate on-time delivery rate
+            $totalCardsWithDeadline = Card::where('user_id', $memberId)
+                ->where('status', 'done')
+                ->whereNotNull('due_date')
+                ->whereHas('board.project', function ($q) use ($projectIds) {
+                    $q->whereIn('projects.id', $projectIds);
+                })
+                ->count();
+            
+            $onTimeRate = $totalCardsWithDeadline > 0 ? ($onTimeCards / $totalCardsWithDeadline) * 100 : 0;
+            
+            // Calculate estimation accuracy rate
+            $estimateAccuracyRate = $cardsWithEstimate->count() > 0 ? ($withinEstimateCards / $cardsWithEstimate->count()) * 100 : 0;
+            
+            // Calculate overall performance score (0-100)
+            // Weighted scoring: Completion count (30%), On-time rate (35%), Estimate accuracy (35%)
+            $performanceScore = 
+                (min($completedCardsCount / 10, 1) * 30) + // Max 30 points for completing 10+ cards
+                ($onTimeRate * 0.35) + // 35 points max for on-time delivery
+                ($estimateAccuracyRate * 0.35); // 35 points max for estimate accuracy
+            
+            $topPerformers[] = [
+                'user' => $member,
+                'completed_cards' => $completedCardsCount,
+                'total_hours' => round($totalMinutes / 60, 1),
+                'avg_time_per_card' => round($avgCompletionTime, 1),
+                'on_time_cards' => $onTimeCards,
+                'on_time_rate' => round($onTimeRate, 1),
+                'within_estimate_cards' => $withinEstimateCards,
+                'estimate_accuracy_rate' => round($estimateAccuracyRate, 1),
+                'performance_score' => round($performanceScore, 1),
+            ];
+        }
+        
+        // Sort by performance score and get top 3
+        usort($topPerformers, function($a, $b) {
+            return $b['performance_score'] <=> $a['performance_score'];
+        });
+        
+        $topPerformingUsers = array_slice($topPerformers, 0, 3);
+
         $myProjectsCount = $totalProjects;
         $activeProjectsCount = $activeProjects;
         $teamMembersCount = $teamMembersCountOriginal;
@@ -275,7 +371,8 @@ class MainController extends Controller
             'teamPermissions',
             'teamTimeLogs',
             'fastestWorker',
-            'slowestWorker'
+            'slowestWorker',
+            'topPerformingUsers'
         );
     }
 

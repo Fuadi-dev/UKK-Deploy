@@ -52,6 +52,7 @@
                             <span class="px-3 py-1.5 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-full inline-block
                                 @if($project->status === 'active') bg-green-100 text-green-800
                                 @elseif($project->status === 'completed') bg-blue-100 text-blue-800
+                                @elseif($project->status === 'review') bg-purple-100 text-purple-800
                                 @elseif($project->status === 'on_hold') bg-yellow-100 text-yellow-800
                                 @elseif($project->status === 'cancelled') bg-red-100 text-red-800
                                 @else bg-gray-100 text-gray-800 @endif">
@@ -59,20 +60,43 @@
                             </span>
                             
                             @if($project->status === 'active')
-                            <!-- Complete Project Button -->
+                            <!-- Submit for Review Button -->
                             <form action="{{ route('leader.projects.updateStatus', $project) }}" method="POST" class="complete-project-form">
                                 @csrf
                                 @method('PUT')
-                                <input type="hidden" name="status" value="completed">
+                                <input type="hidden" name="status" value="review">
                                 <button type="button" 
                                         class="complete-project-btn px-3 py-1.5 lg:px-4 lg:py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-xs lg:text-sm font-medium rounded-full hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-1.5 lg:gap-2 whitespace-nowrap">
-                                    <i class="fas fa-check-circle text-xs lg:text-sm"></i>
-                                    <span class="hidden sm:inline">Mark as Complete</span>
-                                    <span class="sm:hidden">Complete</span>
+                                    <i class="fas fa-paper-plane text-xs lg:text-sm"></i>
+                                    <span class="hidden sm:inline">Submit for Review</span>
+                                    <span class="sm:hidden">Submit</span>
                                 </button>
                             </form>
+                            @elseif($project->status === 'review')
+                            <div class="flex items-center gap-2 px-3 py-1.5 lg:px-4 lg:py-2 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 text-xs lg:text-sm font-medium rounded-full">
+                                <i class="fas fa-hourglass-half text-xs lg:text-sm"></i>
+                                <span>Waiting for Admin Review</span>
+                            </div>
                             @endif
                         </div>
+                        
+                        <!-- Rejection Note Alert -->
+                        @if($project->rejection_note && $project->status === 'active')
+                        <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-circle text-red-500 text-lg"></i>
+                                </div>
+                                <div class="ml-3 flex-1">
+                                    <h3 class="text-sm font-semibold text-red-800 mb-1">Project Rejected</h3>
+                                    <p class="text-sm text-red-700 mb-2">{{ $project->rejection_note }}</p>
+                                    <p class="text-xs text-red-600">
+                                        Rejected {{ $project->rejected_at ? $project->rejected_at->diffForHumans() : '' }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
                         
                         <p class="text-gray-600 text-sm lg:text-lg mb-4 lg:mb-6 line-clamp-3 lg:line-clamp-none">{{ $project->description }}</p>
                         
@@ -259,18 +283,19 @@
                     const form = this.closest('form');
                     
                     Swal.fire({
-                        title: 'Complete This Project?',
+                        title: 'Submit Project for Review?',
                         html: `
                             <div class="text-left space-y-3">
-                                <p class="text-gray-600">Are you sure you want to mark this project as completed?</p>
+                                <p class="text-gray-600">Are you sure you want to submit this project for admin review?</p>
                                 <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-2">
                                     <p class="text-sm text-blue-800 font-medium">
                                         <i class="fas fa-info-circle mr-1"></i> What will happen:
                                     </p>
                                     <ul class="text-sm text-blue-700 space-y-1 ml-6 list-disc">
-                                        <li>Project status will change to <strong>"Completed"</strong></li>
-                                        <li>Team members will be freed (if not in other active projects)</li>
-                                        <li>This action can be reversed by admin if needed</li>
+                                        <li>Project status will change to <strong>"Review"</strong></li>
+                                        <li>Admin will review and either approve or reject</li>
+                                        <li>If approved, project will be marked as completed</li>
+                                        <li>If rejected, project will return to active status</li>
                                     </ul>
                                 </div>
                             </div>
@@ -279,7 +304,7 @@
                         showCancelButton: true,
                         confirmButtonColor: '#3b82f6',
                         cancelButtonColor: '#6b7280',
-                        confirmButtonText: '<i class="fas fa-check-circle mr-2"></i>Yes, Complete Project!',
+                        confirmButtonText: '<i class="fas fa-paper-plane mr-2"></i>Yes, Submit for Review!',
                         cancelButtonText: 'Cancel',
                         reverseButtons: true,
                         customClass: {
@@ -290,7 +315,7 @@
                         if (result.isConfirmed) {
                             // Show loading
                             Swal.fire({
-                                title: 'Completing Project...',
+                                title: 'Submitting Project...',
                                 text: 'Please wait a moment',
                                 allowOutsideClick: false,
                                 allowEscapeKey: false,

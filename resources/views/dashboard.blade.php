@@ -599,6 +599,157 @@
                     </div>
                 @endif
 
+                <!-- Leader: Top Performing Users -->
+                @if(isset($topPerformingUsers) && count($topPerformingUsers) > 0)
+                    <div class="bg-white/80 backdrop-blur-lg rounded-2xl lg:rounded-3xl shadow-2xl border border-white/20 p-4 lg:p-6 mb-4 lg:mb-8">
+                        <h3 class="text-lg lg:text-xl font-bold text-gray-800 mb-3 lg:mb-4 flex items-center">
+                            <svg class="w-5 h-5 lg:w-6 lg:h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                            </svg>
+                            Top Performing Team Members
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
+                            @foreach($topPerformingUsers as $index => $performer)
+                                <div class="bg-gradient-to-br 
+                                    {{ $index === 0 ? 'from-purple-50 to-indigo-50 border-purple-300' : '' }}
+                                    {{ $index === 1 ? 'from-blue-50 to-cyan-50 border-blue-300' : '' }}
+                                    {{ $index === 2 ? 'from-teal-50 to-emerald-50 border-teal-300' : '' }}
+                                    p-4 lg:p-5 rounded-xl border-2">
+                                    
+                                    <!-- Rank Badge -->
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 
+                                                {{ $index === 0 ? 'bg-gradient-to-br from-purple-500 to-indigo-500' : '' }}
+                                                {{ $index === 1 ? 'bg-gradient-to-br from-blue-500 to-cyan-500' : '' }}
+                                                {{ $index === 2 ? 'bg-gradient-to-br from-teal-500 to-emerald-500' : '' }}
+                                                rounded-full flex items-center justify-center mr-3">
+                                                @if($index === 0)
+                                                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                    </svg>
+                                                @else
+                                                    <span class="text-white font-bold text-lg">#{{ $index + 1 }}</span>
+                                                @endif
+                                            </div>
+                                            <div>
+                                                <p class="text-xs 
+                                                    {{ $index === 0 ? 'text-purple-600' : '' }}
+                                                    {{ $index === 1 ? 'text-blue-600' : '' }}
+                                                    {{ $index === 2 ? 'text-teal-600' : '' }}
+                                                    font-semibold">
+                                                    {{ $index === 0 ? '⭐ RANK #1' : 'RANK #' . ($index + 1) }}
+                                                </p>
+                                                <p class="text-xs text-gray-600">Performance Score</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-2xl font-bold 
+                                                {{ $index === 0 ? 'text-purple-600' : '' }}
+                                                {{ $index === 1 ? 'text-blue-600' : '' }}
+                                                {{ $index === 2 ? 'text-teal-600' : '' }}">
+                                                {{ $performer['performance_score'] }}
+                                            </p>
+                                            <p class="text-xs text-gray-500">out of 100</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- User Info -->
+                                    <div class="flex items-center space-x-3 mb-3 pb-3 border-b border-gray-200">
+                                        <x-user-avatar :user="$performer['user']" size="md" />
+                                        <div class="flex-1 min-w-0">
+                                            <h4 class="font-bold text-gray-800 text-base truncate">{{ $performer['user']->name }}</h4>
+                                            <p class="text-xs text-gray-600">{{ ucfirst($performer['user']->role) }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Metrics -->
+                                    <div class="space-y-2">
+                                        <!-- Completed Cards -->
+                                        <div class="flex items-center justify-between text-xs">
+                                            <span class="text-gray-600 flex items-center">
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                Completed Cards
+                                            </span>
+                                            <span class="font-bold text-gray-800">{{ $performer['completed_cards'] }}</span>
+                                        </div>
+                                        
+                                        <!-- On-Time Rate -->
+                                        <div class="flex items-center justify-between text-xs">
+                                            <span class="text-gray-600 flex items-center">
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                On-Time Delivery
+                                            </span>
+                                            <span class="font-bold {{ $performer['on_time_rate'] >= 80 ? 'text-green-600' : 'text-amber-600' }}">
+                                                {{ $performer['on_time_rate'] }}%
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Estimation Accuracy -->
+                                        <div class="flex items-center justify-between text-xs">
+                                            <span class="text-gray-600 flex items-center">
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                                </svg>
+                                                Estimate Accuracy
+                                            </span>
+                                            <span class="font-bold {{ $performer['estimate_accuracy_rate'] >= 80 ? 'text-green-600' : 'text-amber-600' }}">
+                                                {{ $performer['estimate_accuracy_rate'] }}%
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Avg Time & Hours -->
+                                        <div class="mt-3 pt-2 border-t border-gray-200 flex items-center justify-between text-xs">
+                                            <div>
+                                                <p class="text-gray-500">Avg Time/Card</p>
+                                                <p class="font-bold text-gray-800">{{ $performer['avg_time_per_card'] }}h</p>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-gray-500">Total Hours</p>
+                                                <p class="font-bold text-gray-800">{{ $performer['total_hours'] }}h</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Performance Badge -->
+                                    <div class="mt-3 p-2 rounded-lg text-center
+                                        {{ $index === 0 ? 'bg-purple-100' : '' }}
+                                        {{ $index === 1 ? 'bg-blue-100' : '' }}
+                                        {{ $index === 2 ? 'bg-teal-100' : '' }}">
+                                        <p class="text-xs font-semibold
+                                            {{ $index === 0 ? 'text-purple-700' : '' }}
+                                            {{ $index === 1 ? 'text-blue-700' : '' }}
+                                            {{ $index === 2 ? 'text-teal-700' : '' }}">
+                                            @if($performer['performance_score'] >= 80)
+                                                🏆 Excellent Performance
+                                            @elseif($performer['performance_score'] >= 60)
+                                                ⭐ Great Work
+                                            @else
+                                                💪 Good Progress
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        
+                        <!-- Info Footer -->
+                        <div class="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                            <p class="text-xs text-gray-600 flex items-center justify-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                </svg>
+                                Performance score is calculated based on: Cards completed (30%), On-time delivery (35%), Estimation accuracy (35%)
+                            </p>
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Leader: Team Overview & Recent Time Logs -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-8">
                     <!-- Team Permissions -->
@@ -662,9 +813,9 @@
                                 <svg class="w-5 h-5 lg:w-6 lg:h-6 inline-block mr-1 lg:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                 </svg>
-                                Current Card
+                                 
                             </h2>
-                            <a href="{{ route('projects.show', $currentCard->board->project->id) }}" class="text-indigo-600 hover:text-indigo-800 text-xs lg:text-sm font-medium whitespace-nowrap">View →</a>
+                            <a href="{{ route('user.my-card') }}" class="text-indigo-600 hover:text-indigo-800 text-xs lg:text-sm font-medium whitespace-nowrap">View →</a>
                         </div>
                         <div class="p-3 lg:p-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-indigo-200">
                             <div class="flex items-start justify-between mb-3 lg:mb-4">

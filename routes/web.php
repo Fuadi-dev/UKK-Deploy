@@ -146,5 +146,10 @@ Route::middleware('auth')->group(function () {
         // Reports routes
         Route::get('/reports', [ReportController::class, 'index'])->name('reports');
         Route::get('/reports/print', [ReportController::class, 'print'])->name('reports.print');
+        
+        // Review routes
+        Route::get('/review', [\App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('review');
+        Route::post('/review/{project}/approve', [\App\Http\Controllers\Admin\ReviewController::class, 'approve'])->name('review.approve');
+        Route::post('/review/{project}/reject', [\App\Http\Controllers\Admin\ReviewController::class, 'reject'])->name('review.reject');
     });    
 });

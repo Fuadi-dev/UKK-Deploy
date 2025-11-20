@@ -70,7 +70,7 @@ class ProjectController extends Controller
 
         // Check if user has permission to view this project
         if ($user->role !== 'admin' && 
-            $project->user_id !== $user->id && 
+            $project->user_id != $user->id && 
             !$project->members->where('user_id', $user->id)->count()) {
             abort(403, 'Unauthorized access to this project.');
         }
@@ -84,7 +84,7 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
 
         // Check if user has permission to delete
-        if ($user->role !== 'admin' && $project->user_id !== $user->id) {
+        if ($user->role !== 'admin' && $project->user_id != $user->id) {
             return back()->with('error', 'You do not have permission to delete this project.');
         }
 
@@ -98,7 +98,7 @@ class ProjectController extends Controller
         $project = Project::with(['user', 'members.user'])->where('slug', $slug)->firstOrFail();
 
         // Check if user has permission to edit
-        if ($user->role !== 'admin' && $project->user_id !== $user->id) {
+        if ($user->role !== 'admin' && $project->user_id != $user->id) {
             abort(403, 'You do not have permission to edit this project.');
         }
 
@@ -111,7 +111,7 @@ class ProjectController extends Controller
         $project = Project::where('slug', $slug)->firstOrFail();
 
         // Check if user has permission to update
-        if ($user->role !== 'admin' && $project->user_id !== $user->id) {
+        if ($user->role !== 'admin' && $project->user_id != $user->id) {
             return back()->with('error', 'You do not have permission to update this project.');
         }
 
@@ -266,7 +266,7 @@ class ProjectController extends Controller
         $project = Project::where('slug', $slug)->firstOrFail();
 
         // Check if user has permission to add members
-        if ($user->role !== 'admin' && $project->user_id !== $user->id) {
+        if ($user->role !== 'admin' && $project->user_id != $user->id) {
             return response()->json(['error' => 'You do not have permission to add members.'], 403);
         }
 
@@ -326,7 +326,7 @@ class ProjectController extends Controller
         $project = Project::where('slug', $slug)->firstOrFail();
 
         // Check if user has permission to remove members
-        if ($user->role !== 'admin' && $project->user_id !== $user->id) {
+        if ($user->role !== 'admin' && $project->user_id != $user->id) {
             return response()->json(['error' => 'You do not have permission to remove members.'], 403);
         }
 
@@ -355,7 +355,7 @@ class ProjectController extends Controller
         $user = Auth::user();
         
         // Check if user has permission to complete project
-        if ($user->role !== 'admin' && $project->user_id !== $user->id) {
+        if ($user->role !== 'admin' && $project->user_id != $user->id) {
             return back()->with('error', 'You do not have permission to complete this project.');
         }
 
@@ -372,7 +372,7 @@ class ProjectController extends Controller
         $user = Auth::user();
         
         // Check if user has permission to cancel project
-        if ($user->role !== 'admin' && $project->user_id !== $user->id) {
+        if ($user->role !== 'admin' && $project->user_id != $user->id) {
             return back()->with('error', 'You do not have permission to cancel this project.');
         }
 
@@ -389,7 +389,7 @@ class ProjectController extends Controller
         $user = Auth::user();
         
         // Check if user has permission to reactivate project
-        if ($user->role !== 'admin' && $project->user_id !== $user->id) {
+        if ($user->role !== 'admin' && $project->user_id != $user->id) {
             return back()->with('error', 'You do not have permission to reactivate this project.');
         }
 
@@ -406,7 +406,7 @@ class ProjectController extends Controller
         $user = Auth::user();
         
         // Check if user has permission to update project status
-        if ($user->role !== 'admin' && $project->user_id !== $user->id) {
+        if ($user->role !== 'admin' && $project->user_id != $user->id) {
             return back()->with('error', 'You do not have permission to update this project status.');
         }
 

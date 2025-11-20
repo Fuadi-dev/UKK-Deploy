@@ -67,11 +67,11 @@ class ProjectController extends Controller
         }
         
         $request->validate([
-            'status' => 'required|in:completed',
+            'status' => 'required|in:review',
         ]);
         
-        // Only allow completing projects
-        if ($request->status === 'completed') {
+        // Only allow review projects
+        if ($request->status === 'review') {
             $result = ProjectStatusService::completeProject($project);
             return back()->with('success', $result['message']);
         }

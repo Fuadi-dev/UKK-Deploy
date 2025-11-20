@@ -123,16 +123,46 @@ class ProjectStatusService
     }
     
     /**
-     * Complete a project manually and free its members
+     * Submit project for review (called by leader)
      */
     public static function completeProject(Project $project)
     {
-        $project->update(['status' => 'completed']);
-        static::freeProjectMembers($project, 'Project manually completed');
+        $project->update(['status' => 'review']);
         
         return [
             'success' => true,
-            'message' => 'Project completed successfully and team members status updated!'
+            'message' => 'Project submitted for review successfully! Waiting for admin approval.'
+        ];
+    }
+    
+    /**
+     * Approve project and mark as completed (called by admin)
+     */
+    public static function approveProject(Project $project)
+    {
+        $project->update(['status' => 'completed']);
+        static::freeProjectMembers($project, 'Project approved and completed');
+        
+        return [
+            'success' => true,
+            'message' => 'Project approved and completed successfully! Team members status updated.'
+        ];
+    }
+    
+    /**
+     * Reject project and return to active (called by admin)
+     */
+    public static function rejectProject(Project $project, $rejectionNote)
+    {
+        $project->update([
+            'status' => 'active',
+            'rejection_note' => $rejectionNote,
+            'rejected_at' => now()
+        ]);
+        
+        return [
+            'success' => true,
+            'message' => 'Project rejected and returned to active status.'
         ];
     }
     
