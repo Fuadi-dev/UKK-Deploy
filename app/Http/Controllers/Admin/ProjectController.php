@@ -10,6 +10,8 @@ use App\Models\ProjectMember;
 use App\Services\ProjectStatusService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ProjectController extends Controller
@@ -88,8 +90,42 @@ class ProjectController extends Controller
             return back()->with('error', 'You do not have permission to delete this project.');
         }
 
-        $project->delete();
-        return redirect('projects')->with('success', 'Project deleted successfully.');
+        DB::beginTransaction();
+        
+        try {
+            // Get all member IDs before deletion
+            $memberIds = $project->members()->pluck('user_id')->toArray();
+            
+            // Delete project members
+            $project->members()->delete();
+            
+            // Update user status to 'free' if they have no other active projects
+            foreach ($memberIds as $memberId) {
+                $hasOtherProjects = ProjectMember::where('user_id', $memberId)
+                    ->whereHas('project', function($q) {
+                        $q->whereIn('status', ['active', 'on_hold']);
+                    })
+                    ->exists();
+                
+                if (!$hasOtherProjects) {
+                    User::where('id', $memberId)->update(['status' => 'free']);
+                }
+            }
+            
+            // Soft delete project (cascade will handle boards and cards)
+            $project->delete();
+            
+            DB::commit();
+            Log::info('Project deleted successfully', ['project_id' => $id, 'user_id' => $user->id]);
+            
+            return redirect('projects')->with('success', 'Project deleted successfully.');
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to delete project', ['project_id' => $id, 'error' => $e->getMessage()]);
+            
+            return back()->with('error', 'Failed to delete project. Please try again.');
+        }
     }
 
     public function edit($slug)
@@ -162,39 +198,53 @@ class ProjectController extends Controller
             'status' => 'nullable|in:active,on_hold',
         ]);
 
-        $project = Project::create([
-            'project_name' => $request->project_name,
-            'description' => $request->description,
-            'deadline' => $request->deadline,
-            'user_id' => $user->id,
-            'slug' => Str::slug($request->project_name),
-            'status' => $request->status ?? 'active',
-        ]);
-
-        // If a leader is selected, add them as Project Manager
-        if ($request->leader_id) {
-            ProjectMember::create([
-                'project_id' => $project->id,
-                'user_id' => $request->leader_id, 
-                'role' => 'Project Manager',
-                'joined_at' => now(),
-            ]);
-        }
-
-        // Create default boards for the project
-        $name = ['To Do', 'In Progress', 'Review', 'Done'];
-        $description = ['Tasks to be done', 'Tasks currently being worked on', 'Tasks waiting for review', 'Completed tasks'];
+        DB::beginTransaction();
         
-        foreach ($name as $index => $boardName) {
-            Board::create([
-                'project_id' => $project->id,
-                'board_name' => $boardName,
-                'description' => $description[$index] ?? 'Board description',
-                'position' => $index + 1,
+        try {
+            // Create project
+            $project = Project::create([
+                'project_name' => $request->project_name,
+                'description' => $request->description,
+                'deadline' => $request->deadline,
+                'user_id' => $user->id,
+                'slug' => Str::slug($request->project_name),
+                'status' => $request->status ?? 'active',
             ]);
-        }
 
-        return redirect()->route('projects.show', $project->slug)->with('success', 'Project created successfully.');
+            // If a leader is selected, add them as Project Manager
+            if ($request->leader_id) {
+                ProjectMember::create([
+                    'project_id' => $project->id,
+                    'user_id' => $request->leader_id, 
+                    'role' => 'Project Manager',
+                    'joined_at' => now(),
+                ]);
+            }
+
+            // Create default boards for the project
+            $name = ['To Do', 'In Progress', 'Review', 'Done'];
+            $description = ['Tasks to be done', 'Tasks currently being worked on', 'Tasks waiting for review', 'Completed tasks'];
+            
+            foreach ($name as $index => $boardName) {
+                Board::create([
+                    'project_id' => $project->id,
+                    'board_name' => $boardName,
+                    'description' => $description[$index] ?? 'Board description',
+                    'position' => $index + 1,
+                ]);
+            }
+
+            DB::commit();
+            Log::info('Project created successfully', ['project_id' => $project->id, 'user_id' => $user->id]);
+            
+            return redirect()->route('projects.show', $project->slug)->with('success', 'Project created successfully.');
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to create project', ['error' => $e->getMessage(), 'user_id' => $user->id]);
+            
+            return back()->with('error', 'Failed to create project. Please try again.');
+        }
     }
 
     public function searchUsers(Request $request)
@@ -305,19 +355,35 @@ class ProjectController extends Controller
             return response()->json(['error' => 'User is already a member of this project.'], 422);
         }
 
-        ProjectMember::create([
-            'project_id' => $project->id,
-            'user_id' => $request->user_id,
-            'role' => $request->role,
-            'joined_at' => now(),
-        ]);
+        DB::beginTransaction();
+        
+        try {
+            ProjectMember::create([
+                'project_id' => $project->id,
+                'user_id' => $request->user_id,
+                'role' => $request->role,
+                'joined_at' => now(),
+            ]);
 
-        $addedUser = User::find($request->user_id);
+            // Update user status to working
+            User::where('id', $request->user_id)->update(['status' => 'working']);
 
-        return response()->json([
-            'success' => 'Member added successfully.',
-            'user' => $addedUser
-        ]);
+            DB::commit();
+            Log::info('Member added to project', ['project_id' => $project->id, 'user_id' => $request->user_id]);
+            
+            $addedUser = User::find($request->user_id);
+
+            return response()->json([
+                'success' => 'Member added successfully.',
+                'user' => $addedUser
+            ]);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to add member', ['project_id' => $project->id, 'error' => $e->getMessage()]);
+            
+            return response()->json(['error' => 'Failed to add member. Please try again.'], 500);
+        }
     }
 
     public function removeMember(Request $request, $slug)
@@ -342,9 +408,37 @@ class ProjectController extends Controller
             return response()->json(['error' => 'User is not a member of this project.'], 404);
         }
 
-        $member->delete();
-
-        return response()->json(['success' => 'Member removed successfully.']);
+        DB::beginTransaction();
+        
+        try {
+            $userId = $member->user_id;
+            
+            // Delete member
+            $member->delete();
+            
+            // Check if user has other active projects
+            $hasOtherProjects = ProjectMember::where('user_id', $userId)
+                ->whereHas('project', function($q) {
+                    $q->whereIn('status', ['active', 'on_hold']);
+                })
+                ->exists();
+            
+            // Update user status to 'free' if no other active projects
+            if (!$hasOtherProjects) {
+                User::where('id', $userId)->update(['status' => 'free']);
+            }
+            
+            DB::commit();
+            Log::info('Member removed from project', ['project_id' => $project->id, 'user_id' => $userId]);
+            
+            return response()->json(['success' => 'Member removed successfully.']);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to remove member', ['project_id' => $project->id, 'error' => $e->getMessage()]);
+            
+            return response()->json(['error' => 'Failed to remove member. Please try again.'], 500);
+        }
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\ProjectMember;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProjectStatusService
@@ -41,13 +42,22 @@ class ProjectStatusService
         Log::info('Found ' . $expiredProjects->count() . ' expired projects');
         
         foreach ($expiredProjects as $project) {
-            // Update project status to expired
-            $project->update(['status' => 'expired']);
+            DB::beginTransaction();
             
-            // Free project members
-            static::freeProjectMembers($project, 'Project expired due to deadline');
-            
-            Log::info("Project '{$project->project_name}' marked as expired and members freed");
+            try {
+                // Update project status to expired
+                $project->update(['status' => 'expired']);
+                
+                // Free project members
+                static::freeProjectMembers($project, 'Project expired due to deadline');
+                
+                DB::commit();
+                Log::info("Project '{$project->project_name}' marked as expired and members freed");
+                
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error("Failed to expire project '{$project->project_name}'", ['error' => $e->getMessage()]);
+            }
         }
     }
     
@@ -171,13 +181,28 @@ class ProjectStatusService
      */
     public static function cancelProject(Project $project)
     {
-        $project->update(['status' => 'cancelled']);
-        static::freeProjectMembers($project, 'Project cancelled');
+        DB::beginTransaction();
         
-        return [
-            'success' => true,
-            'message' => 'Project cancelled and team members status updated!'
-        ];
+        try {
+            $project->update(['status' => 'cancelled']);
+            static::freeProjectMembers($project, 'Project cancelled');
+            
+            DB::commit();
+            
+            return [
+                'success' => true,
+                'message' => 'Project cancelled and team members status updated!'
+            ];
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to cancel project', ['project_id' => $project->id, 'error' => $e->getMessage()]);
+            
+            return [
+                'success' => false,
+                'message' => 'Failed to cancel project. Please try again.'
+            ];
+        }
     }
     
     /**
@@ -185,16 +210,31 @@ class ProjectStatusService
      */
     public static function reactivateProject(Project $project)
     {
-        $project->update(['status' => 'active']);
+        DB::beginTransaction();
         
-        // Set all project members to working status
-        $memberIds = $project->members->pluck('user_id');
-        User::whereIn('id', $memberIds)->update(['status' => 'working']);
-        
-        return [
-            'success' => true,
-            'message' => 'Project reactivated and team members set to working status!'
-        ];
+        try {
+            $project->update(['status' => 'active']);
+            
+            // Set all project members to working status
+            $memberIds = $project->members->pluck('user_id');
+            User::whereIn('id', $memberIds)->update(['status' => 'working']);
+            
+            DB::commit();
+            
+            return [
+                'success' => true,
+                'message' => 'Project reactivated and team members set to working status!'
+            ];
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to reactivate project', ['project_id' => $project->id, 'error' => $e->getMessage()]);
+            
+            return [
+                'success' => false,
+                'message' => 'Failed to reactivate project. Please try again.'
+            ];
+        }
     }
     
     /**

@@ -8,6 +8,8 @@ use App\Models\ProjectMember;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProjectController extends Controller
 {
@@ -94,28 +96,44 @@ class ProjectController extends Controller
             return response()->json(['message' => 'User already in project'], 409);
         }
 
-        // Update user role if adding as leader
-        if ($request->role === 'leader') {
-            $memberUser = User::find($request->user_id);
-            $memberUser->role = 'leader';
-            $memberUser->save();
+        DB::beginTransaction();
+        
+        try {
+            // Update user role if adding as leader
+            if ($request->role === 'leader') {
+                $memberUser = User::find($request->user_id);
+                $memberUser->role = 'leader';
+                $memberUser->save();
+            }
+
+            $member = ProjectMember::create([
+                'project_id' => $projectId,
+                'user_id' => $request->user_id,
+                'role' => $request->role,
+                'joined_at' => now(),
+            ]);
+
+            // Update user status to working
+            User::where('id', $request->user_id)->update(['status' => 'working']);
+
+            $member->load('user');
+
+            DB::commit();
+            Log::info('Member added to project via API', ['project_id' => $projectId, 'user_id' => $request->user_id]);
+
+            return response()->json([
+                'status' => 'success',
+                'data' => [
+                    'member' => $member,
+                ],
+            ], 201);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to add member via API', ['project_id' => $projectId, 'error' => $e->getMessage()]);
+            
+            return response()->json(['message' => 'Failed to add member. Please try again.'], 500);
         }
-
-        $member = ProjectMember::create([
-            'project_id' => $projectId,
-            'user_id' => $request->user_id,
-            'role' => $request->role,
-            'joined_at' => now(),
-        ]);
-
-        $member->load('user');
-
-        return response()->json([
-            'status' => 'success',
-            'data' => [
-                'member' => $member,
-            ],
-        ], 201);
     }
 
     /**
@@ -137,12 +155,40 @@ class ProjectController extends Controller
             return response()->json(['message' => 'Member not found'], 404);
         }
 
-        $member->delete();
+        DB::beginTransaction();
+        
+        try {
+            $userId = $member->user_id;
+            
+            // Delete member
+            $member->delete();
+            
+            // Check if user has other active projects
+            $hasOtherProjects = ProjectMember::where('user_id', $userId)
+                ->whereHas('project', function($q) {
+                    $q->whereIn('status', ['active', 'on_hold']);
+                })
+                ->exists();
+            
+            // Update user status to 'free' if no other active projects
+            if (!$hasOtherProjects) {
+                User::where('id', $userId)->update(['status' => 'free']);
+            }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Member removed successfully',
-        ], 200);
+            DB::commit();
+            Log::info('Member removed from project via API', ['project_id' => $projectId, 'member_id' => $memberId]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Member removed successfully',
+            ], 200);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to remove member via API', ['project_id' => $projectId, 'error' => $e->getMessage()]);
+            
+            return response()->json(['message' => 'Failed to remove member. Please try again.'], 500);
+        }
     }
 
     /**

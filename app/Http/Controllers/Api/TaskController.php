@@ -11,6 +11,8 @@ use App\Models\Board;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TaskController extends Controller
 {
@@ -120,25 +122,41 @@ class TaskController extends Controller
             ], 400);
         }
 
-        // Update card status to in_progress (Observer will handle started_at)
-        $card->update(['status' => 'in_progress']);
+        DB::beginTransaction();
+        
+        try {
+            // Update card status to in_progress (Observer will handle started_at)
+            $card->update(['status' => 'in_progress']);
 
-        // Move card to In Progress board
-        $this->moveCardToBoard($card, 'In Progress');
+            // Move card to In Progress board
+            $this->moveCardToBoard($card, 'In Progress');
 
-        // Create time log for card (start timer)
-        TimeLog::create([
-            'card_id' => $card->id,
-            'user_id' => $user->id,
-            'start_time' => now(),
-            'description' => 'Started working on card via API'
-        ]);
+            // Create time log for card (start timer)
+            TimeLog::create([
+                'card_id' => $card->id,
+                'user_id' => $user->id,
+                'start_time' => now(),
+                'description' => 'Started working on card via API'
+            ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Work started successfully!',
-            'data' => ['card' => $card->fresh()]
-        ], 200);
+            DB::commit();
+            Log::info('Card started via API', ['card_id' => $cardId, 'user_id' => $user->id]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Work started successfully!',
+                'data' => ['card' => $card->fresh()]
+            ], 200);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to start card via API', ['card_id' => $cardId, 'error' => $e->getMessage()]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to start card. Please try again.'
+            ], 500);
+        }
     }
 
     /**
@@ -180,27 +198,48 @@ class TaskController extends Controller
                 ], 400);
             }
 
-            // Stop active time log for this card (if any)
-            $activeTimeLog = TimeLog::where('card_id', $card->id)
-                ->where('user_id', $user->id)
-                ->whereNull('end_time')
-                ->latest()
-                ->first();
+            DB::beginTransaction();
             
-            if ($activeTimeLog) {
-                $activeTimeLog->update([
-                    'end_time' => now(),
-                    'description' => 'Card submitted for review via API'
-                ]);
-                $activeTimeLog->calculateDuration();
+            try {
+                // Stop active time log for this card (if any)
+                $activeTimeLog = TimeLog::where('card_id', $card->id)
+                    ->where('user_id', $user->id)
+                    ->whereNull('end_time')
+                    ->latest()
+                    ->first();
+                
+                if ($activeTimeLog) {
+                    $activeTimeLog->update([
+                        'end_time' => now(),
+                        'description' => 'Card submitted for review via API'
+                    ]);
+                    $activeTimeLog->calculateDuration();
+                }
+
+                // Update card status
+                $card->status = $request->status;
+                $card->save();
+
+                // Move card to Review board
+                $this->moveCardToBoard($card, 'Review');
+
+                DB::commit();
+                Log::info('Card updated to review via API', ['card_id' => $cardId, 'user_id' => $user->id]);
+                
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Failed to update card status via API', ['card_id' => $cardId, 'error' => $e->getMessage()]);
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to update card status. Please try again.'
+                ], 500);
             }
-
-            // Move card to Review board
-            $this->moveCardToBoard($card, 'Review');
+        } else {
+            // Simple status update without transaction
+            $card->status = $request->status;
+            $card->save();
         }
-
-        $card->status = $request->status;
-        $card->save();
 
         return response()->json([
             'success' => true,
